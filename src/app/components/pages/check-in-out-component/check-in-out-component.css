@@ -1,0 +1,71 @@
+
+.btn-check-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0.5rem;
+}
+
+.live-clock {
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: rgba(0, 0, 0, 1);
+}
+.btn-check-in-out {
+  background-color: rgba(79, 106, 53, 0.92);
+  color: var(--white-color);
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-check-in-out:hover {
+  background-color: #4f6a35;
+  transform: translateY(-1px);
+}
+
+.btn-check-in-out.btn-checked-in {
+  background-color: rgba(255, 193, 7, 0.9);
+  color: #000;
+}
+
+.btn-check-in-out.btn-checked-in:hover {
+  background-color: #e0a800;
+}
+
+.btn-check-in-out.btn-checked-out {
+  background-color: rgba(0, 0, 0, 0.88);
+}
+
+.btn-check-in-out.btn-checked-out:hover {
+  background-color: #505050;
+}
+
+.btn-check-wrapper.checked-out .live-clock {
+  color: rgba(255, 255, 255, 0.22);
+}
+
+@media (max-width: 576px) {
+  .live-clock {
+    font-size: 1.1rem;
+  }
+}
+.blur-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.4);
+  z-index: 900;
+}

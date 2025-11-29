@@ -1,0 +1,17 @@
+<div class="btn-check-wrapper" [class.checked-out]="CheckAttendance()">
+  <span class="live-clock">{{ currentTime | date:'hh:mm:ss a' }}</span>
+  @if (CheckAttendance()) {
+    <button class="btn btn-check-in-out btn-checked-out" (click)="openCameraModal()">
+      <i class="bi bi-moon"></i> Check-out
+    </button>
+  }
+  @else {
+    <button class="btn btn-check-in-out btn-checked-in" (click)="openCameraModal()">
+      <i class="bi bi-sun"></i> Check-in
+    </button>
+  }
+</div>
+@if (showCameraModal) {
+  <div class="blur-overlay"></div>
+  <app-camera-model (faceDetected)="closeCameraModal($event)"></app-camera-model>
+}

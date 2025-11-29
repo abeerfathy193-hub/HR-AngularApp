@@ -1,0 +1,228 @@
+<div class="page-container">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+              Company Details
+          </h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="CompanyForm">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Company Name <span class="text-danger">*</span></label>
+                <input type="text" 
+                       class="form-control" 
+                       formControlName="CompanyName"
+                       required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" 
+                       class="form-control" 
+                       formControlName="ContactEmail"
+                       name="email">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                <input type="tel" 
+                       class="form-control" 
+                       formControlName="ContactPhone"
+                       name="phone">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Website</label>
+                <input type="url" 
+                       class="form-control" 
+                       formControlName="Website"
+                       name="website">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
+                <label class="form-label">Address</label>
+                <button type="button" class="btn btn-outline-primary btn-sm pick-location-btn"
+                        (click)="openMapModal()" [disabled]="loading">
+                  <i class="bi bi-geo-alt"></i> Pick Location on Map
+                </button>
+              </div>
+              <div class="address-picker">
+                <textarea class="form-control" 
+                          rows="2" 
+                          [(ngModel)]="formData.address" 
+                          name="address"
+                          readonly></textarea>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label class="form-label">Latitude</label>
+                <input type="number" class="form-control"
+                       [(ngModel)]="formData.latitude"
+                       name="latitude"
+                       readonly>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Longitude</label>
+                <input type="number" class="form-control"
+                       [(ngModel)]="formData.longitude"
+                       name="longitude"
+                       readonly>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Radius (meters)</label>
+                <input type="number" class="form-control"
+                       [(ngModel)]="formData.radiusInMeters"
+                       name="radiusInMeters"
+                       readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Tax ID</label>
+                <input type="text" 
+                       class="form-control" 
+                       [(ngModel)]="formData.taxId" 
+                       name="taxId"
+                       [readonly]="!isCreating && !isEditing">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Registration Number</label>
+                <input type="text" 
+                       class="form-control" 
+                       [(ngModel)]="formData.registrationNumber" 
+                       name="registrationNumber"
+                       [readonly]="!isCreating && !isEditing">
+              </div>
+            </div>
+
+            @if (isCreating || isEditing) {
+              <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary" [disabled]="loading">
+                  @if (loading) {
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                  }
+                  Save
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="loading">
+                  Cancel
+                </button>
+              </div>
+            }
+          </form>
+          @if (!selectedCompany && !isCreating) {
+            <p class="text-muted">Select a company from the list or create a new one.</p>
+          } @else {
+
+
+            @if (hasLocation) {
+              <div class="card mt-4 map-preview-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <strong>Location Preview</strong>
+                  <span class="small text-muted">Radius: {{ formData.radiusInMeters }} m</span>
+                </div>
+                <div class="card-body">
+                  <google-map height="250px"
+                              width="100%"
+                              [center]="previewCenter"
+                              [zoom]="16">
+                    <map-marker [position]="previewCenter"></map-marker>
+                    <map-circle *ngIf="formData.radiusInMeters"
+                                [center]="previewCenter"
+                                [radius]="formData.radiusInMeters!"
+                                [options]="circleOptions">
+                    </map-circle>
+                  </google-map>
+                  <div class="small text-muted mt-2">
+                    {{ formData.address }}
+                    @if (formData.latitude !== null && formData.longitude !== null) {
+                      <span>• {{ formData.latitude }}, {{ formData.longitude }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (showMapModal) {
+  <div class="map-modal-overlay">
+    <div class="map-modal card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Pick Location on Map</h5>
+        <button type="button" class="btn-close" (click)="closeMapModal()" aria-label="Close"></button>
+      </div>
+      <div class="card-body">
+        <google-map height="360px"
+                    width="100%"
+                    [center]="mapCenter"
+                    [zoom]="mapZoom"
+                    (mapClick)="handleMapClick($event)">
+          <map-marker *ngIf="markerPosition"
+                      [position]="markerPosition"
+                      [options]="markerOptions"
+                      (mapDragEnd)="handleMarkerDrag($event)">
+          </map-marker>
+          <map-circle *ngIf="markerPosition"
+                      [center]="markerPosition!"
+                      [radius]="mapRadius"
+                      [options]="circleOptions">
+          </map-circle>
+        </google-map>
+
+        <div class="row g-3 mt-3">
+          <div class="col-md-4">
+            <label class="form-label small text-muted">Latitude</label>
+            <input type="text" class="form-control" [value]="markerPosition?.lat ?? ''" readonly>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small text-muted">Longitude</label>
+            <input type="text" class="form-control" [value]="markerPosition?.lng ?? ''" readonly>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small text-muted">Radius (meters)</label>
+            <input type="number"
+                   class="form-control"
+                   min="10"
+                   step="5"
+                   [ngModel]="pendingSelection?.radius ?? mapRadius"
+                   (ngModelChange)="handleRadiusChange($event)"
+                   [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="col-12">
+            <label class="form-label small text-muted">Detected Address</label>
+            <input type="text"
+                   class="form-control"
+                   [value]="pendingSelection?.address || formData.address"
+                   readonly>
+          </div>
+        </div>
+
+        @if (geocoding) {
+          <div class="text-muted small mt-2">Looking up address...</div>
+        }
+        @if (mapError) {
+          <div class="text-danger small mt-2">{{ mapError }}</div>
+        }
+      </div>
+      <div class="card-footer d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeMapModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="applyMapSelection()">Save Location</button>
+      </div>
+    </div>
+  </div>
+}
+
+

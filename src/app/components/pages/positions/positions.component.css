@@ -1,0 +1,17 @@
+@import '../shared/page-styles.css';
+
+.list-group-item {
+  cursor: pointer;
+}
+
+.list-group-item.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.list-group-item:hover:not(.active) {
+  background-color: #f8f9fa;
+}
+
+

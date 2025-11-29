@@ -1,0 +1,38 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+    <div class="sidebar-header">
+        <img src="\images\HR-Header.png" class="logo-icon" alt="">
+    </div>
+
+    <nav class="sidebar-nav">
+        <ul class="nav-list">
+            <li *ngFor="let item of menuItems" class="nav-item">
+                @if (item.children && item.children.length > 0) {
+                    <div class="nav-link nav-link-parent" (click)="toggleSection(item)">
+                        <i [class]="item.icon"></i>
+                        <span class="nav-label" *ngIf="!collapsed">{{ item.label }}</span>
+                        <i *ngIf="!collapsed" 
+                           class="bi bi-chevron-down expand-icon" 
+                           [class.rotated]="isExpanded(item)"></i>
+                    </div>
+                    <ul *ngIf="isExpanded(item) && !collapsed" class="submenu">
+                        <li *ngFor="let child of item.children" class="submenu-item">
+                            <a [routerLink]="child.route" 
+                               routerLinkActive="active" 
+                               class="nav-link submenu-link">
+                                <i [class]="child.icon"></i>
+                                <span class="nav-label">{{ child.label }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                } @else {
+                    <a [routerLink]="item.route" 
+                       routerLinkActive="active"
+                       class="nav-link">
+                        <i [class]="item.icon"></i>
+                        <span class="nav-label" *ngIf="!collapsed">{{ item.label }}</span>
+                    </a>
+                }
+            </li>
+        </ul>
+    </nav>
+</aside>

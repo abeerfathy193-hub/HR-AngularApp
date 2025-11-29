@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <button class="btn btn-link d-md-none" type="button" (click)="onToggleSidebar()" aria-label="Toggle sidebar">
+      <span class="navbar-toggler-icon">☰</span>
+    </button>
+
+    <h4 class="navbar-title mb-0">{{ navigationService.currentPageTitle() }}</h4>
+    <div class="navbar-actions">
+
+       <app-check-in-out-component></app-check-in-out-component>
+
+      <div class="dropdown">
+        <button class="btn btn-user-profile" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://tse1.mm.bing.net/th/id/OIP.xWzsFoxN1Ush3LhCvyR-pgHaK_?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile image"
+            class="user-avatar" />
+          <span class="user-name"> Abeer </span>
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <a class="dropdown-item" href="#" (click)="$event.preventDefault()">
+              <i class="bi bi-gear"></i> Settings
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" (click)="onLogout(); $event.preventDefault()">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

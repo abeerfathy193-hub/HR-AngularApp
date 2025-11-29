@@ -1,0 +1,70 @@
+.list-group-item {
+  cursor: pointer;
+}
+
+.list-group-item.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.list-group-item:hover:not(.active) {
+  background-color: #f8f9fa;
+}
+
+.pick-location-btn {
+  white-space: nowrap;
+}
+
+.address-picker {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.address-picker textarea {
+  resize: none;
+}
+
+.map-preview-card google-map {
+  border-radius: 10px;
+  overflow: hidden;
+  display: block;
+}
+
+.map-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  z-index: 1200;
+}
+
+.map-modal {
+  width: min(900px, 100%);
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.35);
+}
+
+.map-modal .card-body {
+  overflow: auto;
+}
+
+.map-modal google-map {
+  border-radius: 12px;
+  overflow: hidden;
+  display: block;
+}
+
+@media (max-width: 576px) {
+  .address-picker {
+    flex-direction: column;
+  }
+}
+
+

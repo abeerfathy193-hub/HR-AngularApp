@@ -1,0 +1,75 @@
+/* Bootstrap is loaded via CDN in index.html */
+
+/* Custom Color Palette */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400&display=swap');
+:root {
+  --primary-color: #E67E22;
+  --secondary-color: #628141;
+  --accent-color: #8BAE66;
+  --light-color: #EBD5AB;
+  --white-color: #FFFFFF;
+}
+
+/* Global Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;;
+  background-color: #f5f5f5;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d66a1a;
+}
+
+.page-container .page-header {
+  margin-bottom: 30px;
+}
+
+.page-container .page-header h2 {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.page-container .page-header .text-muted {
+  color: #666;
+  font-size: 14px;
+}
+
+.page-container .card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-container .card .card-body {
+  padding: 25px;
+}
+
+.page-container .card .card-body .card-title {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.page-container .card .card-body .card-text {
+  color: #666;
+  line-height: 1.6;
+}
+

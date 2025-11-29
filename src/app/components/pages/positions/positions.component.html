@@ -1,0 +1,203 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Positions</h2>
+    <p class="text-muted">Manage job positions by department</p>
+  </div>
+
+  @if (error) {
+    <div class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
+  }
+
+  <!-- Department Filter -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row align-items-end">
+        <div class="col-md-6">
+          <label class="form-label">Filter by Department</label>
+          <select class="form-select" [(ngModel)]="selectedDepartmentId" (ngModelChange)="onDepartmentChange()">
+            <option [value]="null">All Departments</option>
+            @for (dept of departments; track dept.id) {
+              <option [value]="dept.id">{{ dept.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-primary" (click)="startCreate()" [disabled]="loading">
+            <i class="bi bi-plus-circle"></i> New Position
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Positions List -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Positions 
+            @if (selectedDepartmentId) {
+              <span class="badge bg-secondary">{{ positions.length }}</span>
+            }
+          </h5>
+        </div>
+        <div class="card-body p-0">
+          @if (loading && positions.length === 0) {
+            <div class="text-center p-3">
+              <div class="spinner-border spinner-border-sm" role="status"></div>
+            </div>
+          } @else if (positions.length === 0) {
+            <div class="text-center p-3 text-muted">
+              No positions found
+            </div>
+          } @else {
+            <ul class="list-group list-group-flush">
+              @for (position of positions; track position.id) {
+                <li class="list-group-item list-group-item-action" 
+                    [class.active]="selectedPosition?.id === position.id"
+                    (click)="selectPosition(position)">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <strong>{{ position.title }}</strong>
+                      <div class="text-muted small">
+                        {{ getDepartmentName(position.departmentId) }}
+                        @if (position.salaryRange) {
+                          • {{ position.salaryRange }}
+                        }
+                      </div>
+                      @if (!position.isActive) {
+                        <span class="badge bg-secondary">Inactive</span>
+                      }
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger" 
+                            (click)="deletePosition(position.id); $event.stopPropagation()">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Position Details Form -->
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            @if (isCreating) {
+              Create New Position
+            } @else if (isEditing) {
+              Edit Position
+            } @else {
+              Position Details
+            }
+          </h5>
+          @if (!isCreating && !isEditing && selectedPosition) {
+            <div>
+              <button class="btn btn-sm btn-primary me-2" (click)="startEdit()">
+                <i class="bi bi-pencil"></i> Edit
+              </button>
+            </div>
+          }
+        </div>
+        <div class="card-body">
+          @if (!selectedPosition && !isCreating) {
+            <p class="text-muted">Select a position from the list or create a new one.</p>
+          } @else {
+            <form (ngSubmit)="save()">
+              <div class="row mb-3">
+                <div class="col-md-8">
+                  <label class="form-label">Position Title <span class="text-danger">*</span></label>
+                  <input type="text" 
+                         class="form-control" 
+                         [(ngModel)]="formData.title" 
+                         name="title"
+                         [readonly]="!isCreating && !isEditing"
+                         required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Department <span class="text-danger">*</span></label>
+                  <select class="form-select" 
+                          [(ngModel)]="formData.departmentId" 
+                          name="departmentId"
+                          [disabled]="!isCreating && !isEditing"
+                          required>
+                    <option [value]="0">Select Department</option>
+                    @for (dept of departments; track dept.id) {
+                      <option [value]="dept.id">{{ dept.name }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" 
+                          rows="3" 
+                          [(ngModel)]="formData.description" 
+                          name="description"
+                          [readonly]="!isCreating && !isEditing"></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Requirements</label>
+                <textarea class="form-control" 
+                          rows="2" 
+                          [(ngModel)]="formData.requirements" 
+                          name="requirements"
+                          [readonly]="!isCreating && !isEditing"></textarea>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Salary Range</label>
+                  <input type="text" 
+                         class="form-control" 
+                         [(ngModel)]="formData.salaryRange" 
+                         name="salaryRange"
+                         [readonly]="!isCreating && !isEditing"
+                         placeholder="e.g., $50,000 - $70,000">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Status</label>
+                  <div class="form-check form-switch mt-2">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           [(ngModel)]="formData.isActive" 
+                           name="isActive"
+                           [disabled]="!isCreating && !isEditing"
+                           id="isActive">
+                    <label class="form-check-label" for="isActive">
+                      Active
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              @if (isCreating || isEditing) {
+                <div class="d-flex gap-2">
+                  <button type="submit" class="btn btn-primary" [disabled]="loading">
+                    @if (loading) {
+                      <span class="spinner-border spinner-border-sm me-2"></span>
+                    }
+                    Save
+                  </button>
+                  <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="loading">
+                    Cancel
+                  </button>
+                </div>
+              }
+            </form>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,19 @@
+<google-map
+  height="400px"
+  width="100%"
+  [center]="center"
+  [zoom]="zoom"
+  (mapClick)="placeMarker($event)">
+</google-map>
+
+<map-marker
+  *ngIf="marker"
+  [position]="marker!"
+  [options]="markerOptions"
+  (mapDragEnd)="updateMarkerPosition($event)">
+</map-marker>
+
+<div class="coords">
+  <p><strong>Latitude:</strong> {{ latitude }}</p>
+  <p><strong>Longitude:</strong> {{ longitude }}</p>
+</div>
