@@ -1,0 +1,28 @@
+    .point-box {
+    background: #f7f7f7;
+    border-left: 4px solid var(--primary-color);
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    }
+/* Primary themed button (for Create Contract) */
+.btn-primary-theme {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border: none;
+}
+
+.btn-primary-theme:hover {
+  background-color: #d66a1a; /* Darker shade for hover */
+}
+
+/* Accent themed button (for Add Point) */
+.btn-accent-theme {
+  background-color: var(--accent-color);
+  color: var(--white-color);
+  border: none;
+}
+
+.btn-accent-theme:hover {
+  background-color: #7fa95c; /* Darker shade for hover */
+}

@@ -13,6 +13,9 @@ import { AttendanceComponent } from './components/pages/attendance/attendance.co
 import { VacanciesComponent } from './components/pages/vacancies/vacancies.component';
 import { LoginComponent } from './components/pages/login/login.component';
 import { authGuard } from './guards/auth.guard';
+import { CreateContractComponent } from './components/pages/contracts/create.contract/create-contract';
+import { ViewContractComponent } from './components/pages/contracts/contract.view/contract.view';
+import { EditContractComponent } from './components/pages/contracts/contract.edit/contract.edit';
 
 export const routes: Routes = [
   {
@@ -31,7 +34,13 @@ export const routes: Routes = [
         {path: 'departments', component: DepartmentsComponent},
         {path: 'positions', component: PositionsComponent}
       ]},
-      { path: 'contracts', component: ContractsComponent },
+          { path: 'contracts', component: ContractsComponent },
+          { path: 'contracts/create', component: CreateContractComponent },
+          { path: 'contracts/view/:id', component: ViewContractComponent },
+{ path: 'contracts/edit/:id', component: EditContractComponent }
+
+    
+,
       { path: 'leaves-holidays', component: LeavesHolidaysComponent },
       { path: 'employees-data', component: EmployeesDataComponent },
       { path: 'payroll', component: PayrollComponent },

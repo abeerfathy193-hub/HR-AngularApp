@@ -1,0 +1,102 @@
+        <div class="page-container">
+        <div class="page-header">
+            <h2>Create Contract</h2>
+            <p class="text-muted">Create a new employee contract</p>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+
+            <form (ngSubmit)="submit()">
+
+                <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Title</label>
+                    <input class="form-control" [(ngModel)]="dto.title" name="title">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Contract Type</label>
+                    <select class="form-control" [(ngModel)]="dto.contractType" name="contractType">
+                        <option value="">Select Contract Type</option>
+                        <option *ngFor="let type of contractTypes" [value]="type">{{ type }}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" class="form-control" [(ngModel)]="dto.startDate" name="startDate">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date" class="form-control" [(ngModel)]="dto.endDate" name="endDate">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Base Salary</label>
+                    <input type="number" class="form-control" [(ngModel)]="dto.baseSalary" name="baseSalary">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Employee ID</label>
+                    <input type="number" class="form-control" [(ngModel)]="dto.employeeId" name="employeeId">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Working Hours (per day)</label>
+                    <input class="form-control" [(ngModel)]="dto.workingHoursPerDay" name="workingHours">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Annual Leave Days</label>
+                    <input type="number" class="form-control" [(ngModel)]="dto.annualLeaveDays" name="annualLeaveDays">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Probation Period (days)</label>
+                    <input type="number" class="form-control" [(ngModel)]="dto.probationPeriodDays" name="probationPeriodDays">
+                </div>
+
+                </div>
+
+                <!-- Contract Points Section -->
+    <hr class="my-4">
+    <h5 class="mb-3 text-primary">Contract Points</h5>
+
+    <!-- Input fields for new point -->
+    <div class="row mb-3">
+    <div class="col-md-5">
+        <input type="text" class="form-control" placeholder="Point Header"
+            [(ngModel)]="newPoint.header" name="pointHeader">
+    </div>
+    <div class="col-md-5">
+        <input type="text" class="form-control" placeholder="Point Description"
+            [(ngModel)]="newPoint.description" name="pointDescription">
+    </div>
+    <div class="col-md-2">
+        <button type="button" class="btn btn-accent-theme w-100" (click)="addPoint()">Add</button>
+    </div>
+    </div>
+
+    <!-- Display added points -->
+    <div *ngFor="let p of dto.points; let i = index" class="point-box mb-2">
+    <div class="d-flex justify-content-between">
+        <strong>{{ p.header }}</strong>
+        <button type="button" class="btn btn-danger btn-sm" (click)="removePoint(i)">Remove</button>
+    </div>
+    <p>{{ p.description }}</p>
+    </div>
+
+
+                <!-- Submit -->
+                <div class="mt-4">
+                <button class="btn btn-primary-theme w-100">Create Contract</button>
+                </div>
+
+            </form>
+
+            </div>
+        </div>
+        </div>
