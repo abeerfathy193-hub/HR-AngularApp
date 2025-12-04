@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { LayoutComponent } from './components/layout/layout.component';
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { CompanyDataComponent } from './components/pages/company-data/company-data.component';
-//import { CompanyInfoComponent } from './components/pages/company-info/company-info.component';
 import { DepartmentsComponent } from './components/pages/departments/departments.component';
 import { PositionsComponent } from './components/pages/positions/positions.component';
 import { LeavesHolidaysComponent } from './components/pages/leaves-holidays/leaves-holidays.component';
@@ -17,6 +16,7 @@ import { CreateContractComponent } from './components/pages/contracts/create.con
 import { ViewContractComponent } from './components/pages/contracts/contract.view/contract.view';
 import { EditContractComponent } from './components/pages/contracts/contract.edit/contract.edit';
 import { EmployeeComponent } from './components/pages/employee-component/employee-component';
+import { CompanyInfoComponent } from './components/pages/company-info/company-info.component';
 
 export const routes: Routes = [
   {
@@ -30,22 +30,24 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'company-data', component: CompanyDataComponent, children: [
-        {path: 'company-info', component: CompanyInfoComponent},
-        {path: 'departments', component: DepartmentsComponent},
-        {path: 'positions', component: PositionsComponent}
-      ]},
-          { path: 'contracts', component: ContractsComponent },
-          { path: 'contracts/create', component: CreateContractComponent },
-          { path: 'contracts/view/:id', component: ViewContractComponent },
-{ path: 'contracts/edit/:id', component: EditContractComponent }
-
-    
-,
+      {
+        path: 'company-data', component: CompanyDataComponent, children: [
+          { path: 'company-info', component: CompanyInfoComponent },
+          { path: 'departments', component: DepartmentsComponent },
+          { path: 'positions', component: PositionsComponent }
+        ]
+      },
+      { path: 'contracts', component: ContractsComponent },
+      { path: 'contracts/create', component: CreateContractComponent },
+      { path: 'contracts/view/:id', component: ViewContractComponent },
+      { path: 'contracts/edit/:id', component: EditContractComponent }
+      ,
       { path: 'leaves-holidays', component: LeavesHolidaysComponent },
-      { path: 'employees-data', component: EmployeesDataComponent, children: [
-        {path: 'employees', component: EmployeeComponent}
-      ]},
+      {
+        path: 'employees-data', component: EmployeesDataComponent, children: [
+          { path: 'employees', component: EmployeeComponent }
+        ]
+      },
       { path: 'payroll', component: PayrollComponent },
       { path: 'attendance', component: AttendanceComponent },
       { path: 'vacancies', component: VacanciesComponent }
