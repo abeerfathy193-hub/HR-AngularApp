@@ -8,7 +8,7 @@
     })
     export class ContractService {
 
-    private apiUrl = 'https://localhost:44317/api/Contract';
+    private apiUrl = 'https://localhost:7138/api/Contract';
 
     constructor(private http: HttpClient) {}
 
