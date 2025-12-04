@@ -1,38 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-
-export interface Position {
-  id: number;
-  title: string;
-  description?: string;
-  departmentId: number;
-  departmentName?: string;
-  requirements?: string;
-  salaryRange?: string;
-  isActive: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface PositionCreateDto {
-  title: string;
-  description?: string;
-  departmentId: number;
-  requirements?: string;
-  salaryRange?: string;
-  isActive?: boolean;
-}
-
-export interface PositionUpdateDto {
-  title?: string;
-  description?: string;
-  departmentId?: number;
-  requirements?: string;
-  salaryRange?: string;
-  isActive?: boolean;
-}
+import { IPosition, IPositionCreate, IPositionUpdate } from '../interfaces/position.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -42,27 +11,27 @@ export class PositionService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(departmentId?: number): Observable<Position[]> {
+  getAllPositions(departmentId?: number) {
     let params = new HttpParams();
     if (departmentId) {
       params = params.set('departmentId', departmentId.toString());
     }
-    return this.http.get<Position[]>(this.API_URL, { params });
+    return this.http.get<IPosition[]>(this.API_URL, { params });
   }
 
-  getById(id: number): Observable<Position> {
-    return this.http.get<Position>(`${this.API_URL}/${id}`);
+  getPositionById(id: number) {
+    return this.http.get<IPosition>(`${this.API_URL}/${id}`);
   }
 
-  create(dto: PositionCreateDto): Observable<Position> {
-    return this.http.post<Position>(this.API_URL, dto);
+  createPosition(dto: IPositionCreate) {
+    return this.http.post<IPosition>(this.API_URL, dto);
   }
 
-  update(id: number, dto: PositionUpdateDto): Observable<Position> {
-    return this.http.put<Position>(`${this.API_URL}/${id}`, dto);
+  updatePosition(dto: IPositionUpdate) {
+    return this.http.put<IPosition>(`${this.API_URL}/${dto.id}`, dto);
   }
 
-  delete(id: number): Observable<void> {
+  deletePosition(id: number) {
     return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 }

@@ -16,6 +16,7 @@ import { authGuard } from './guards/auth.guard';
 import { CreateContractComponent } from './components/pages/contracts/create.contract/create-contract';
 import { ViewContractComponent } from './components/pages/contracts/contract.view/contract.view';
 import { EditContractComponent } from './components/pages/contracts/contract.edit/contract.edit';
+import { EmployeeComponent } from './components/pages/employee-component/employee-component';
 
 export const routes: Routes = [
   {
@@ -29,20 +30,21 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'company-data', component: CompanyDataComponent, children: [
-        {path: 'company-info', component: CompanyInfoComponent},
-        {path: 'departments', component: DepartmentsComponent},
-        {path: 'positions', component: PositionsComponent}
-      ]},
-          { path: 'contracts', component: ContractsComponent },
-          { path: 'contracts/create', component: CreateContractComponent },
-          { path: 'contracts/view/:id', component: ViewContractComponent },
-{ path: 'contracts/edit/:id', component: EditContractComponent }
-
-    
-,
+      {
+        path: 'company-data', component: CompanyDataComponent, children: [
+          { path: 'company-info', component: CompanyInfoComponent },
+          { path: 'departments', component: DepartmentsComponent },
+          { path: 'positions', component: PositionsComponent }
+        ]
+      },
+      { path: 'contracts', component: ContractsComponent },
+      { path: 'contracts/create', component: CreateContractComponent },
+      { path: 'contracts/view/:id', component: ViewContractComponent },
+      { path: 'contracts/edit/:id', component: EditContractComponent },
       { path: 'leaves-holidays', component: LeavesHolidaysComponent },
-      { path: 'employees-data', component: EmployeesDataComponent },
+      { path: 'employees-data', component: EmployeesDataComponent, children: [
+        {path: 'employees', component: EmployeeComponent}
+      ]},
       { path: 'payroll', component: PayrollComponent },
       { path: 'attendance', component: AttendanceComponent },
       { path: 'vacancies', component: VacanciesComponent }

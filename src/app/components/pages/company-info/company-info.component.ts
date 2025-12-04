@@ -31,7 +31,9 @@ export class CompanyInfoComponent implements OnInit {
     CompanyHeader: new FormControl(''),
     CompanyFooter: new FormControl(''),
     TaxRegistrationNumber: new FormControl('', Validators.required),
-    CommercialNumber: new FormControl('', Validators.required)
+    CommercialNumber: new FormControl('', Validators.required),
+    WorkStartTime: new FormControl<number | null>(null),
+    WorkEndTime: new FormControl<number | null>(null)
   });
 
   companyId?: number;
@@ -69,7 +71,7 @@ export class CompanyInfoComponent implements OnInit {
   }
   loadCompany() {
     this.loading = true;
-    this.companyService.GetCompanySetting().subscribe({
+    this.companyService.getCompanySetting().subscribe({
       next: (data) => {
         this.companyId = data.id;
         this.latitude = data.latitude;
@@ -88,7 +90,9 @@ export class CompanyInfoComponent implements OnInit {
           CompanyHeader: data.companyHeader ? `${environment.webApiURL}/Files/CompanySettings/${data.companyHeader}` : '',
           CompanyFooter: data.companyFooter ? `${environment.webApiURL}/Files/CompanySettings/${data.companyFooter}` : '',
           TaxRegistrationNumber: data.taxRegistrationNumber,
-          CommercialNumber: data.commercialNumber
+          CommercialNumber: data.commercialNumber,
+          WorkStartTime: data.workStartTime,
+          WorkEndTime: data.workEndTime
         });
         this.loading = false;
       },
@@ -116,10 +120,10 @@ export class CompanyInfoComponent implements OnInit {
       if (this.selectedFooter)
         formData.append('footerFile', this.selectedFooter, this.selectedFooter.name);
 
-      console.log('FormData contents:');
-      formData.forEach((value, key) => {
-        console.log(key, ':', value);
-      });
+      // console.log('FormData contents:');
+      // formData.forEach((value, key) => {
+      //   console.log(key, ':', value);
+      // });
       // const companyObj = {
       //   id: this.companyId,
       //   companyName: this.CompanyForm.value.CompanyName?.trim(),
@@ -142,9 +146,10 @@ export class CompanyInfoComponent implements OnInit {
       // } as ICompanyUpdated;
 
       this.loading = true;
-      this.companyService.SaveCompanySetting(formData).subscribe({
+      this.companyService.saveCompanySetting(formData).subscribe({
         next: (data) => {
           this.loading = false;
+          alert('Company information saved successfully.');
           this.loadCompany();
         },
         error: (err) => {
@@ -202,7 +207,6 @@ export class CompanyInfoComponent implements OnInit {
     debugger
     this.latitude = Number(lat.toFixed(6));
     this.longitude = Number(lng.toFixed(6));
-    // this.CompanyForm.value.Address = 'Loading...';
 
 
     if (this.marker) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { ICompany } from '../interfaces/company.interface';
 
@@ -9,14 +9,20 @@ import { ICompany } from '../interfaces/company.interface';
 export class CompanyService {
   private readonly API_URL = `${environment.webApiURL}/api/Company`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  GetCompanySetting() {
+  getCompanySetting() {
+    // const headers = new HttpHeaders({
+    //   'Authorization': `Bearer ${this.authService.token()}`
+    // });
     return this.http.get<ICompany>(`${this.API_URL}/GetCompanySetting`);
   }
 
-  SaveCompanySetting(dto: FormData){
-    return this.http.post<ICompany>(`${this.API_URL}/SaveCompanySetting`, dto);
+  saveCompanySetting(dto: FormData) {
+    // const headers = new HttpHeaders({
+    //   'Authorization': `Bearer ${this.authService.token()}`
+    // });
+    return this.http.post(`${this.API_URL}/SaveCompanySetting`, dto);
   }
 }
 

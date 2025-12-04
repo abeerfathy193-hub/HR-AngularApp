@@ -13,7 +13,7 @@ export interface LoginResponse {
     id: string;
     username: string;
     email: string;
-    avatar?: string;
+    role: string;
   };
 }
 
@@ -34,12 +34,11 @@ export class AuthService {
     private http: HttpClient,
     private router: Router
   ) {
-    // Check if user is already logged in (from localStorage)
     this.checkStoredAuth();
   }
 
+
   private checkStoredAuth(): void {
-    // Check both localStorage and sessionStorage
     const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
     const userStr = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
     
@@ -54,7 +53,9 @@ export class AuthService {
       }
     }
   }
-
+  getUserRole(): string | null {
+    return this._currentUser() ? this._currentUser()!.role : null;
+  }
   login(credentials: LoginRequest, rememberMe: boolean = false): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API_URL}/login`, credentials).pipe(
       tap((response) => {

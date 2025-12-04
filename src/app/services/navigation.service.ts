@@ -15,12 +15,16 @@ export class NavigationService {
 
   private routeTitleMap: Record<string, string> = {
     '/dashboard': 'Dashboard',
+    '/company-data': 'Company Data',
     '/company-data/company-info': 'Company Info',
     '/company-data/departments': 'Departments',
     '/company-data/positions': 'Positions',
     '/contracts': 'Contracts',
+
     '/leaves-holidays': 'Leaves & Holidays',
     '/employees-data': 'Employees Data',
+    '/employees-data/employees': 'Employees Info',
+
     '/payroll': 'Payroll',
     '/attendance': 'Attendance',
     '/vacancies': 'Vacancies',
