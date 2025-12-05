@@ -34,11 +34,12 @@
 }
 
 .btn-check-in-out.btn-checked-in {
-  background-color: rgba(255, 193, 7, 0.9);
+  background-color: var(--primary-color, #E67E22);
 }
 
 .btn-check-in-out.btn-checked-in:hover {
-  background-color: #e0a800;
+  background-color: #d66a1a;
+  box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
 }
 
 .btn-check-in-out.btn-checked-out {

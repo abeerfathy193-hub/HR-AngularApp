@@ -11,17 +11,23 @@ import { ContractsComponent } from './components/pages/contracts/contracts.compo
 import { AttendanceComponent } from './components/pages/attendance/attendance.component';
 import { VacanciesComponent } from './components/pages/vacancies/vacancies.component';
 import { LoginComponent } from './components/pages/login/login.component';
+import { RegisterComponent } from './components/pages/register/register.component';
 import { authGuard } from './guards/auth.guard';
 import { CreateContractComponent } from './components/pages/contracts/create.contract/create-contract';
 import { ViewContractComponent } from './components/pages/contracts/contract.view/contract.view';
 import { EditContractComponent } from './components/pages/contracts/contract.edit/contract.edit';
 import { EmployeeComponent } from './components/pages/employee-component/employee-component';
+import { AddEmployeeComponent } from './components/pages/employee-component/add-employee/add-employee.component';
 import { CompanyInfoComponent } from './components/pages/company-info/company-info.component';
 
 export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: '',
@@ -45,7 +51,8 @@ export const routes: Routes = [
       { path: 'leaves-holidays', component: LeavesHolidaysComponent },
       {
         path: 'employees-data', component: EmployeesDataComponent, children: [
-          { path: 'employees', component: EmployeeComponent }
+          { path: 'employees', component: EmployeeComponent },
+          { path: 'employees/create', component: AddEmployeeComponent }
         ]
       },
       { path: 'payroll', component: PayrollComponent },

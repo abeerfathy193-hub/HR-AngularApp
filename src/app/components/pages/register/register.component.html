@@ -1,0 +1,536 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <img src="/images/logo.png" alt="HR System Logo" class="logo" />
+      <h2>Create Account</h2>
+      <p class="subtitle">Sign up to join the HR System</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      @if (errorMessage) {
+        <div class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (successMessage) {
+        <div class="alert alert-success" role="alert">
+          {{ successMessage }}
+        </div>
+      }
+
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">Personal Information</h3>
+
+        <div class="form-group">
+          <label for="fullName">Full Name <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            id="fullName"
+            formControlName="fullName"
+            class="form-control"
+            [class.is-invalid]="fullName?.invalid && fullName?.touched"
+            placeholder="Enter your full name"
+          />
+          @if (fullName?.invalid && fullName?.touched) {
+            <div class="invalid-feedback">
+              @if (fullName?.errors?.['required']) {
+                <span>Full name is required</span>
+              }
+              @if (fullName?.errors?.['minlength']) {
+                <span>Full name must be at least 3 characters</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="birthDate">Birth Date <span class="text-danger">*</span></label>
+            <input
+              type="date"
+              id="birthDate"
+              formControlName="birthDate"
+              class="form-control"
+              [class.is-invalid]="birthDate?.invalid && birthDate?.touched"
+            />
+            @if (birthDate?.invalid && birthDate?.touched) {
+              <div class="invalid-feedback">
+                <span>Birth date is required</span>
+              </div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Gender <span class="text-danger">*</span></label>
+            <select
+              id="gender"
+              formControlName="gender"
+              class="form-control"
+              [class.is-invalid]="gender?.invalid && gender?.touched"
+            >
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            @if (gender?.invalid && gender?.touched) {
+              <div class="invalid-feedback">
+                <span>Gender is required</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            id="address"
+            formControlName="address"
+            class="form-control"
+            [class.is-invalid]="address?.invalid && address?.touched"
+            placeholder="Enter your address"
+          />
+          @if (address?.invalid && address?.touched) {
+            <div class="invalid-feedback">
+              <span>Address is required</span>
+            </div>
+          }
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="country">Country <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              id="country"
+              formControlName="country"
+              class="form-control"
+              [class.is-invalid]="country?.invalid && country?.touched"
+              placeholder="Enter your country"
+            />
+            @if (country?.invalid && country?.touched) {
+              <div class="invalid-feedback">
+                <span>Country is required</span>
+              </div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="nationality">Nationality <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              id="nationality"
+              formControlName="nationality"
+              class="form-control"
+              [class.is-invalid]="nationality?.invalid && nationality?.touched"
+              placeholder="Enter your nationality"
+            />
+            @if (nationality?.invalid && nationality?.touched) {
+              <div class="invalid-feedback">
+                <span>Nationality is required</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="maritalStatus">Marital Status <span class="text-danger">*</span></label>
+            <select
+              id="maritalStatus"
+              formControlName="maritalStatus"
+              class="form-control"
+              [class.is-invalid]="maritalStatus?.invalid && maritalStatus?.touched"
+            >
+              <option value="">Select marital status</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Divorced">Divorced</option>
+              <option value="Widowed">Widowed</option>
+            </select>
+            @if (maritalStatus?.invalid && maritalStatus?.touched) {
+              <div class="invalid-feedback">
+                <span>Marital status is required</span>
+              </div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="education">Education <span class="text-danger">*</span></label>
+            <select
+              id="education"
+              formControlName="education"
+              class="form-control"
+              [class.is-invalid]="education?.invalid && education?.touched"
+            >
+              <option value="">Select education level</option>
+              <option value="High School">High School</option>
+              <option value="Bachelor">Bachelor</option>
+              <option value="Master">Master</option>
+              <option value="PhD">PhD</option>
+            </select>
+            @if (education?.invalid && education?.touched) {
+              <div class="invalid-feedback">
+                <span>Education is required</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="militaryStatus">Military Status <span class="text-danger">*</span></label>
+          <select
+            id="militaryStatus"
+            formControlName="militaryStatus"
+            class="form-control"
+            [class.is-invalid]="militaryStatus?.invalid && militaryStatus?.touched"
+          >
+            <option value="">Select military status</option>
+            <option value="Exempted">Exempted</option>
+            <option value="Postponement">Postponement</option>
+            <option value="Terminated">Terminated</option>
+          </select>
+          @if (militaryStatus?.invalid && militaryStatus?.touched) {
+            <div class="invalid-feedback">
+              <span>Military status is required</span>
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number <span class="text-danger">*</span></label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            formControlName="phoneNumber"
+            class="form-control"
+            [class.is-invalid]="phoneNumber?.invalid && phoneNumber?.touched"
+            placeholder="Enter your phone number"
+          />
+          @if (phoneNumber?.invalid && phoneNumber?.touched) {
+            <div class="invalid-feedback">
+              @if (phoneNumber?.errors?.['required']) {
+                <span>Phone number is required</span>
+              }
+              @if (phoneNumber?.errors?.['pattern']) {
+                <span>Please enter a valid phone number</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Person Files Section -->
+      <div class="form-section">
+        <h3 class="section-title">Person Files</h3>
+
+        <div class="form-group">
+          <label for="imgFile">Profile Image</label>
+          <input
+            type="file"
+            id="imgFile"
+            (change)="onImgFileSelected($event)"
+            accept="image/*"
+            class="form-control"
+          />
+          @if (imgPreview) {
+            <div class="file-preview mt-2">
+              <img [src]="imgPreview" alt="Profile preview" class="preview-image" />
+            </div>
+          }
+          <small class="text-muted">Recommended: PNG/JPG, max 5MB</small>
+        </div>
+
+        <div class="form-group">
+          <label for="cvFile">CV/Resume File</label>
+          <input
+            type="file"
+            id="cvFile"
+            (change)="onCvFileSelected($event)"
+            accept=".pdf,.doc,.docx"
+            class="form-control"
+          />
+          @if (selectedCvFile) {
+            <small class="text-muted d-block mt-1">Selected: {{ selectedCvFile.name }}</small>
+          }
+          <small class="text-muted">Accepted: PDF, DOC, DOCX</small>
+        </div>
+
+        <div class="form-group">
+          <label for="militaryFile">Military File</label>
+          <input
+            type="file"
+            id="militaryFile"
+            (change)="onMilitaryFileSelected($event)"
+            accept=".pdf,.jpg,.jpeg,.png"
+            class="form-control"
+          />
+          @if (selectedMilitaryFile) {
+            <small class="text-muted d-block mt-1">Selected: {{ selectedMilitaryFile.name }}</small>
+          }
+          <small class="text-muted">Accepted: PDF, JPG, PNG</small>
+        </div>
+
+        <div class="form-group">
+          <label for="educationFile">Education File</label>
+          <input
+            type="file"
+            id="educationFile"
+            (change)="onEducationFileSelected($event)"
+            accept=".pdf,.jpg,.jpeg,.png"
+            class="form-control"
+          />
+          @if (selectedEducationFile) {
+            <small class="text-muted d-block mt-1">Selected: {{ selectedEducationFile.name }}</small>
+          }
+          <small class="text-muted">Accepted: PDF, JPG, PNG</small>
+        </div>
+      </div>
+
+      <!-- Applicant Data Section -->
+      <div class="form-section">
+        <h3 class="section-title">Applicant Data</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="currentJobTitle">Current Job Title</label>
+            <input
+              type="text"
+              id="currentJobTitle"
+              formControlName="currentJobTitle"
+              class="form-control"
+              placeholder="Enter current job title"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="currentCompany">Current Company</label>
+            <input
+              type="text"
+              id="currentCompany"
+              formControlName="currentCompany"
+              class="form-control"
+              placeholder="Enter current company"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="linkedInUrl">LinkedIn URL</label>
+          <input
+            type="url"
+            id="linkedInUrl"
+            formControlName="linkedInUrl"
+            class="form-control"
+            [class.is-invalid]="linkedInUrl?.invalid && linkedInUrl?.touched"
+            placeholder="https://linkedin.com/in/yourprofile"
+          />
+          @if (linkedInUrl?.invalid && linkedInUrl?.touched) {
+            <div class="invalid-feedback">
+              <span>Please enter a valid LinkedIn URL</span>
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="portfolioUrl">Portfolio URL</label>
+          <input
+            type="url"
+            id="portfolioUrl"
+            formControlName="portfolioUrl"
+            class="form-control"
+            [class.is-invalid]="portfolioUrl?.invalid && portfolioUrl?.touched"
+            placeholder="https://yourportfolio.com"
+          />
+          @if (portfolioUrl?.invalid && portfolioUrl?.touched) {
+            <div class="invalid-feedback">
+              <span>Please enter a valid URL</span>
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="githubUrl">GitHub URL</label>
+          <input
+            type="url"
+            id="githubUrl"
+            formControlName="githubUrl"
+            class="form-control"
+            [class.is-invalid]="githubUrl?.invalid && githubUrl?.touched"
+            placeholder="https://github.com/yourusername"
+          />
+          @if (githubUrl?.invalid && githubUrl?.touched) {
+            <div class="invalid-feedback">
+              <span>Please enter a valid GitHub URL</span>
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="professionalSummary">Professional Summary</label>
+          <textarea
+            id="professionalSummary"
+            formControlName="professionalSummary"
+            class="form-control"
+            rows="4"
+            placeholder="Enter your professional summary"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Account Credentials Section -->
+      <div class="form-section">
+        <h3 class="section-title">Account Credentials</h3>
+
+        <div class="form-group">
+          <label for="userName">User Name <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            id="userName"
+            formControlName="userName"
+            class="form-control"
+            [class.is-invalid]="userName?.invalid && userName?.touched"
+            placeholder="Enter your username"
+          />
+          @if (userName?.invalid && userName?.touched) {
+            <div class="invalid-feedback">
+              @if (userName?.errors?.['required']) {
+                <span>User name is required</span>
+              }
+              @if (userName?.errors?.['minlength']) {
+                <span>User name must be at least 3 characters</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address <span class="text-danger">*</span></label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-control"
+            [class.is-invalid]="email?.invalid && email?.touched"
+            placeholder="Enter your email"
+          />
+          @if (email?.invalid && email?.touched) {
+            <div class="invalid-feedback">
+              @if (email?.errors?.['required']) {
+                <span>Email is required</span>
+              }
+              @if (email?.errors?.['email']) {
+                <span>Please enter a valid email address</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Password <span class="text-danger">*</span></label>
+            <input
+              type="password"
+              id="password"
+              formControlName="password"
+              class="form-control"
+              [class.is-invalid]="password?.invalid && password?.touched"
+              placeholder="Enter your password"
+            />
+            @if (password?.invalid && password?.touched) {
+              <div class="invalid-feedback">
+                @if (password?.errors?.['required']) {
+                  <span>Password is required</span>
+                }
+                @if (password?.errors?.['minLength']) {
+                  <span>Password must be at least 8 characters</span>
+                }
+                @if (password?.errors?.['uppercase']) {
+                  <span>Password must contain at least one uppercase letter</span>
+                }
+                @if (password?.errors?.['lowercase']) {
+                  <span>Password must contain at least one lowercase letter</span>
+                }
+                @if (password?.errors?.['number']) {
+                  <span>Password must contain at least one number</span>
+                }
+                @if (password?.errors?.['specialChar']) {
+                  <span>Password must contain at least one special character</span>
+                }
+              </div>
+            }
+            @if (password?.value && password?.touched) {
+              <div class="password-requirements mt-2">
+                <small class="text-muted d-block mb-1">Password must contain:</small>
+                <ul class="password-checklist">
+                  <li [class.valid]="hasMinLength()" [class.invalid]="!hasMinLength()">
+                    <span class="check-icon">{{ hasMinLength() ? '✓' : '✗' }}</span>
+                    At least 8 characters
+                  </li>
+                  <li [class.valid]="hasUppercase()" [class.invalid]="!hasUppercase()">
+                    <span class="check-icon">{{ hasUppercase() ? '✓' : '✗' }}</span>
+                    One uppercase letter
+                  </li>
+                  <li [class.valid]="hasLowercase()" [class.invalid]="!hasLowercase()">
+                    <span class="check-icon">{{ hasLowercase() ? '✓' : '✗' }}</span>
+                    One lowercase letter
+                  </li>
+                  <li [class.valid]="hasNumber()" [class.invalid]="!hasNumber()">
+                    <span class="check-icon">{{ hasNumber() ? '✓' : '✗' }}</span>
+                    One number
+                  </li>
+                  <li [class.valid]="hasSpecialChar()" [class.invalid]="!hasSpecialChar()">
+                    <span class="check-icon">{{ hasSpecialChar() ? '✓' : '✗' }}</span>
+                    One special character
+                  </li>
+                </ul>
+              </div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password <span class="text-danger">*</span></label>
+            <input
+              type="password"
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              class="form-control"
+              [class.is-invalid]="confirmPassword?.invalid && confirmPassword?.touched"
+              placeholder="Confirm your password"
+            />
+            @if (confirmPassword?.invalid && confirmPassword?.touched) {
+              <div class="invalid-feedback">
+                @if (confirmPassword?.errors?.['required']) {
+                  <span>Please confirm your password</span>
+                }
+                @if (confirmPassword?.errors?.['passwordMismatch']) {
+                  <span>Passwords do not match</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-register"
+        [disabled]="isLoading || registerForm.invalid"
+      >
+        @if (isLoading) {
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Registering...
+        } @else {
+          Create Account
+        }
+      </button>
+
+      <div class="login-link">
+        <p>Already have an account? <a routerLink="/login">Sign in</a></p>
+      </div>
+    </form>
+  </div>
+</div>
+
