@@ -11,28 +11,26 @@ export class PositionService {
 
   constructor(private http: HttpClient) {}
 
-  getAllPositions(departmentId?: number) {
-    let params = new HttpParams();
-    if (departmentId) {
-      params = params.set('departmentId', departmentId.toString());
-    }
-    return this.http.get<IPosition[]>(this.API_URL, { params });
+  getAllPositions() {
+    return this.http.get<IPosition[]>(this.API_URL);
   }
-
+  getPositionsByDepartment(departmentId: number) { 
+    return this.http.get<IPosition[]>(`${this.API_URL}/department/${departmentId}`);
+  }
   getPositionById(id: number) {
     return this.http.get<IPosition>(`${this.API_URL}/${id}`);
   }
 
   createPosition(dto: IPositionCreate) {
-    return this.http.post<IPosition>(this.API_URL, dto);
+    return this.http.post(this.API_URL, dto);
   }
 
   updatePosition(dto: IPositionUpdate) {
-    return this.http.put<IPosition>(`${this.API_URL}/${dto.id}`, dto);
+    return this.http.put(`${this.API_URL}`, dto);
   }
 
   deletePosition(id: number) {
-    return this.http.delete<void>(`${this.API_URL}/${id}`);
+    return this.http.delete(`${this.API_URL}/${id}`);
   }
 }
 

@@ -14,22 +14,20 @@ export class DepartmentService {
   getAll() {
     return this.http.get<IDepartment[]>(`${this.API_URL}/GetAll`);
   }
-
+  getAllActive() {
+    return this.http.get<IDepartment[]>(`${this.API_URL}/GetAllActive`);
+  }
   getById(id: number) {
     return this.http.get<IDepartment>(`${this.API_URL}/GetDepartmentById/${id}`);
   }
-
-
   create(dto: IDepartmentCreate) {
     return this.http.post(`${this.API_URL}/CreateDepartment`, dto);
   }
-
   update(dto: IDepartmentUpdate) {
-    return this.http.put<IDepartment>(`${this.API_URL}/UpdateDepartment`, dto);
+    return this.http.put(`${this.API_URL}/UpdateDepartment`, dto);
   }
-
   delete(id: number) {
-    return this.http.delete<void>(`${this.API_URL}/DeleteDepartment/${id}`);
+    return this.http.delete(`${this.API_URL}/DeleteDepartment/${id}`);
   }
 }
 

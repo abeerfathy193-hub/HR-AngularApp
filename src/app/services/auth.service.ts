@@ -1,20 +1,19 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
 import { LoginRequest } from '../interfaces/login.interface';
 import { environment } from '../../environments/environment.development';
 
 
 
 export interface LoginResponse {
-  token: string;
   user: {
-    id: string;
-    username: string;
-    email: string;
-    role: string;
-  };
+    Eid: number;
+    userName: string;
+    imagepath: string
+    roles: string[];
+  }
+  token: string;
 }
 
 @Injectable({
@@ -26,14 +25,11 @@ export class AuthService {
   private _token = signal<string | null>(null);
   private _currentUser = signal<LoginResponse['user'] | null>(null);
 
-  isAuthenticated = this._isAuthenticated.asReadonly();
-  currentUser = this._currentUser.asReadonly();
-  token = this._token.asReadonly();
+  isAuthenticated: boolean = false;
+  currentUser: LoginResponse | null = null;
+  token: string | null = null;
 
-  constructor(
-    private http: HttpClient,
-    private router: Router
-  ) {
+  constructor(private http: HttpClient, private router: Router) {
     this.checkStoredAuth();
   }
 
@@ -43,18 +39,14 @@ export class AuthService {
     const userStr = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
 
     if (token && userStr) {
-      try {
-        const user = JSON.parse(userStr);
-        this._token.set(token);
-        this._currentUser.set(user);
-        this._isAuthenticated.set(true);
-      } catch (error) {
-        this.clearAuth();
-      }
+      const user = JSON.parse(userStr);
+      this.token = token;
+      this.currentUser = JSON.parse(userStr);
+      this.isAuthenticated = true;
     }
   }
-  getUserRole(): string | null {
-    return this._currentUser() ? this._currentUser()!.role : null;
+  getUserRoles(): string[] | null {
+    return this.currentUser ? this.currentUser.user.roles : null;
   }
   login(credentials: LoginRequest, rememberMe: boolean = false): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API_URL}/login`, credentials).pipe(
@@ -169,6 +161,25 @@ export class AuthService {
       }
     });
   }
+  getUserId(): number | null {
+    return this.currentUser ? this.currentUser.user.Eid : null;
+  }
+  getUserName(): string | null {
+    return this.currentUser ? this.currentUser.user.userName : null;
+  }
+  getUserImage(): string | null {
+    return this.currentUser ? `${environment.webApiURL}/Files/${this.currentUser.user.imagepath}` : null;
+  }
+  login(credentials: LoginRequest) {
+    return this.http.post<LoginResponse>(`${this.API_URL}/login`, credentials);
+  }
+  setCredentials(credentials: LoginResponse, rememberMe: boolean = false) {
+    const storage = rememberMe ? localStorage : sessionStorage;
+    storage.setItem('authToken', credentials.token);
+    storage.setItem('currentUser', JSON.stringify(credentials.user));
+    this.checkStoredAuth();
+  }
+
 
   register(registerData: FormData): Observable<any> {
     return this.http.post(`${this.API_URL}/register`, registerData);
@@ -180,9 +191,6 @@ export class AuthService {
   }
 
   private clearAuth(): void {
-    this._token.set(null);
-    this._currentUser.set(null);
-    this._isAuthenticated.set(false);
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
     localStorage.removeItem('rememberMe');

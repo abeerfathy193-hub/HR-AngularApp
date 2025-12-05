@@ -36,7 +36,8 @@
                 <span class="input-group-text bg-white">
                   <i class="bi bi-building"></i>
                 </span>
-                <select class="form-select" (change)="onDepartmentFilterChange(departmentFilter.value)" #departmentFilter>
+                <select class="form-select" (change)="onDepartmentFilterChange(departmentFilter.value)"
+                  #departmentFilter>
                   <option value="">All Departments</option>
                   <option *ngFor="let dept of departments" [value]="dept.id">{{ dept.name }}</option>
                 </select>
@@ -85,7 +86,7 @@
                     <small class="text-muted">{{ pos.description || 'N/A' }}</small>
                   </td>
                   <td>
-                    <span class="badge bg-primary">{{ pos.departmentName || getDepartmentName(pos.departmentId) }}</span>
+                    <span class="badge bg-secondary">{{ pos.departmentName }}</span>
                   </td>
                   <td class="text-center">
                     <div class="btn-group" role="group">
@@ -93,8 +94,8 @@
                         title="Edit">
                         <i class="bi bi-pencil-square"></i>
                       </button>
-                      <button class="btn btn-sm btn-outline-danger" (click)="deletePosition(pos)"
-                        [disabled]="loading" title="Delete">
+                      <button class="btn btn-sm btn-outline-danger" (click)="deletePosition(pos)" [disabled]="loading"
+                        title="Delete">
                         <i class="bi bi-trash"></i>
                       </button>
                     </div>
@@ -110,89 +111,92 @@
             <div class="text-muted">
               Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
               {{ (currentPage * itemsPerPage) < filteredPositions.length? (currentPage * itemsPerPage) :
-                filteredPositions.length }} of {{ filteredPositions.length }} entries
-            </div>
-            <nav>
-              <ul class="pagination pagination-sm mb-0">
-                <li class="page-item" [class.disabled]="currentPage === 1">
-                  <a class="page-link" (click)="goToPage(currentPage - 1)" href="#">
-                    <i class="bi bi-chevron-left"></i>
-                  </a>
-                </li>
+                filteredPositions.length }} of {{ filteredPositions.length }} entries </div>
+                <nav>
+                  <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                      <a class="page-link" (click)="goToPage(currentPage - 1)">
+                        <i class="bi bi-chevron-left"></i>
+                      </a>
+                    </li>
 
-                <li class="page-item" [class.disabled]="currentPage === totalPages">
-                  <a class="page-link" (click)="goToPage(currentPage + 1)" href="#">
-                    <i class="bi bi-chevron-right"></i>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                      <a class="page-link" (click)="goToPage(currentPage + 1)">
+                        <i class="bi bi-chevron-right"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="modal fade" id="positionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header text-white">
-          <h5 class="modal-title">
-            <i class="bi me-2" [ngClass]="isEditMode ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
-            {{ isEditMode ? 'Edit Position' : 'Add New Position' }}
-          </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
+    <div class="modal fade" id="positionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header text-white">
+            <h5 class="modal-title">
+              <i class="bi me-2" [ngClass]="isEditMode ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
+              {{ isEditMode ? 'Edit Position' : 'Add New Position' }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
 
-        <form [formGroup]="PositionForm" (submit)="savePosition()">
-          <div class="modal-body">
-            <div class="row g-3">
-              <div class="col-md-12">
-                <label class="form-label">
-                  Title <span class="text-danger">*</span>
-                </label>
-                <input type="text" class="form-control" formControlName="title"
-                  [class.is-invalid]="isFieldInvalid('title')" placeholder="e.g., Senior Developer">
-                <div class="invalid-feedback">
-                  Title is required (min 3 characters)
+          <form [formGroup]="PositionForm" (submit)="savePosition()">
+            <div class="modal-body">
+              <div class="row g-3">
+                <div class="col-md-12">
+                  <label class="form-label">
+                    Title <span class="text-danger">*</span>
+                  </label>
+                  <input type="text" class="form-control" formControlName="title"
+                    [class.is-invalid]="PositionForm.controls['title'].invalid && PositionForm.controls['title'].touched"
+                    placeholder="e.g., Senior Developer">
+                  @if (PositionForm.controls['title'].invalid && PositionForm.controls['title'].touched) {
+                  <div class="invalid-feedback">
+                    Title is required (min 3 characters)
+                  </div>
+                  }
                 </div>
-              </div>
 
-              <div class="col-md-12">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" rows="3" formControlName="description"
-                  placeholder="Enter position description..."></textarea>
-              </div>
+                <div class="col-md-12">
+                  <label class="form-label">Description</label>
+                  <textarea class="form-control" rows="3" formControlName="description"
+                    placeholder="Enter position description..."></textarea>
+                </div>
 
-              <div class="col-md-12">
-                <label class="form-label">
-                  Department <span class="text-danger">*</span>
-                </label>
-                <select class="form-select" formControlName="departmentId"
-                  [class.is-invalid]="isFieldInvalid('departmentId')">
-                  <option [value]="null">Select Department</option>
-                  <option *ngFor="let dept of departments" [value]="dept.id">{{ dept.name }}</option>
-                </select>
-                <div class="invalid-feedback">
-                  Department is required
+                <div class="col-md-12">
+                  <label class="form-label">
+                    Department <span class="text-danger">*</span>
+                  </label>
+                  <select class="form-select" formControlName="departmentId"
+                    [class.is-invalid]="PositionForm.controls['departmentId'].invalid && PositionForm.controls['departmentId'].touched">
+                    <option disabled>Select Department</option>
+                    <option *ngFor="let dept of departments" [value]="dept.id">{{ dept.name }}</option>
+                  </select>
+                  @if (PositionForm.controls['departmentId'].invalid && PositionForm.controls['departmentId'].touched) {
+                  <div class="invalid-feedback">
+                    Department is required
+                  </div>
+                  }
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" [disabled]="loading">
-              <i class="bi bi-x-circle me-1"></i> Cancel
-            </button>
-            <button type="submit" class="btn btn-primary rounded-pill" [disabled]="loading || PositionForm.invalid">
-              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-              <i *ngIf="!loading" class="bi bi-check-circle me-1"></i>
-              {{ isEditMode ? 'Update' : 'Create' }}
-            </button>
-          </div>
-        </form>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" [disabled]="loading">
+                <i class="bi bi-x-circle me-1"></i> Cancel
+              </button>
+              <button type="submit" class="btn btn-success rounded-pill" [disabled]="loading || PositionForm.invalid">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                <i *ngIf="!loading" class="bi bi-check-circle me-1"></i>
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
-

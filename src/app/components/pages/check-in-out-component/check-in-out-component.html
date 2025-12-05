@@ -1,6 +1,6 @@
-<div class="btn-check-wrapper" [class.checked-out]="CheckAttendance">
+<div class="btn-check-wrapper" [class.checked-out]="IsAttended">
   <span class="live-clock">{{ currentTime | date:'hh:mm:ss a' }}</span>
-  @if (CheckAttendance) {
+  @if (IsAttended) {
     <button class="btn btn-check-in-out btn-checked-out" (click)="openCameraModal()">
       <i class="bi bi-moon"></i> Check-out
     </button>
@@ -13,5 +13,5 @@
 </div>
 @if (showCameraModal) {
   <div class="blur-overlay"></div>
-  <app-camera-model (faceDetected)="closeCameraModal($event)"></app-camera-model>
+  <app-camera-model (faceDetected)="onDetect($event)"></app-camera-model>
 }

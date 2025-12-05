@@ -20,7 +20,7 @@ export class DepartmentsComponent implements OnInit {
   paginatedDepartments: IDepartment[] = [];
 
   currentPage: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 5;
   totalPages: number = 0;
 
   loading: boolean = false;
@@ -57,25 +57,25 @@ export class DepartmentsComponent implements OnInit {
   applyPagination(): void {
     this.totalPages = Math.ceil(this.filteredDepartments.length / this.itemsPerPage);
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
+    const endIndex = (startIndex + this.itemsPerPage) > this.filteredDepartments.length ? this.filteredDepartments.length : (startIndex + this.itemsPerPage);
     this.paginatedDepartments = this.filteredDepartments.slice(startIndex, endIndex);
   }
 
   onSearch(searchVal: string): void {
     if (searchVal) {
       const val = searchVal.toLowerCase().trim();
-      if (!val) {
-        this.filteredDepartments = this.departments;
-      } else {
+      if (val) {
         this.filteredDepartments = this.departments.filter(dept =>
           dept.code.toLowerCase().includes(val) ||
           dept.name.toLowerCase().includes(val) ||
           (dept.description && dept.description.toLowerCase().includes(val))
         );
-        this.currentPage = 1;
-        this.applyPagination();
       }
     }
+    else
+      this.filteredDepartments = this.departments;
+    this.currentPage = 1;
+    this.applyPagination();
   }
 
   goToPage(page: number): void {

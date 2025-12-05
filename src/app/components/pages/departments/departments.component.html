@@ -68,7 +68,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let dept of paginatedDepartments; let i = index">
-                  <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+                  <td>{{ ((currentPage - 1) * itemsPerPage) + (i + 1) }}</td>
                   <td>
                     <span class="badge bg-secondary">{{ dept.code }}</span>
                   </td>
@@ -87,9 +87,7 @@
                     </span>
                   </td>
                   <td>
-                    <span
-                      class="badge"
-                      [ngClass]="dept.isActive ? 'bg-success' : 'bg-danger'">
+                    <span class="badge" [ngClass]="dept.isActive ? 'bg-success' : 'bg-danger'">
                       {{ dept.isActive ? 'Active' : 'Inactive' }}</span>
                   </td>
                   <td class="text-center">
@@ -123,13 +121,13 @@
                 <nav>
                   <ul class="pagination pagination-sm mb-0">
                     <li class="page-item" [class.disabled]="currentPage === 1">
-                      <a class="page-link" (click)="goToPage(currentPage - 1)" href="#">
+                      <a class="page-link" (click)="goToPage(currentPage - 1)">
                         <i class="bi bi-chevron-left"></i>
                       </a>
                     </li>
 
                     <li class="page-item" [class.disabled]="currentPage === totalPages">
-                      <a class="page-link" (click)="goToPage(currentPage + 1)" href="#">
+                      <a class="page-link" (click)="goToPage(currentPage + 1)">
                         <i class="bi bi-chevron-right"></i>
                       </a>
                     </li>
@@ -161,12 +159,13 @@
                   Department Code <span class="text-danger">*</span>
                 </label>
                 <input type="text" class="form-control" formControlName="code"
-                  [class.is-invalid]="DepartmentForm.controls['code'].invalid && DepartmentForm.controls['code'].touched" placeholder="e.g., IT, HR">
-                  @if(DepartmentForm.controls['code'].invalid && DepartmentForm.controls['code'].touched){
-                    <div class="invalid-feedback">
-                      Code is required (min 2 characters)
-                    </div>
-                  }
+                  [class.is-invalid]="DepartmentForm.controls['code'].invalid && DepartmentForm.controls['code'].touched"
+                  placeholder="e.g., IT, HR">
+                @if(DepartmentForm.controls['code'].invalid && DepartmentForm.controls['code'].touched){
+                <div class="invalid-feedback">
+                  Code is required (min 2 characters)
+                </div>
+                }
               </div>
 
               <div class="col-md-6">
@@ -174,11 +173,12 @@
                   Department Name <span class="text-danger">*</span>
                 </label>
                 <input type="text" class="form-control" formControlName="name"
-                [class.is-invalid]="DepartmentForm.controls['name'].invalid && DepartmentForm.controls['name'].touched" placeholder="e.g., Information Technology">
+                  [class.is-invalid]="DepartmentForm.controls['name'].invalid && DepartmentForm.controls['name'].touched"
+                  placeholder="e.g., Information Technology">
                 @if(DepartmentForm.controls['name'].invalid && DepartmentForm.controls['name'].touched){
-                  <div class="invalid-feedback">
-                    Name is required (min 3 characters)
-                  </div>
+                <div class="invalid-feedback">
+                  Name is required (min 3 characters)
+                </div>
                 }
 
               </div>
@@ -191,7 +191,8 @@
 
               <div class="col-md-12">
                 <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="isActiveSwitch" formControlName="isActive" (change)="onStatusChange($event)">
+                  <input class="form-check-input" type="checkbox" id="isActiveSwitch" formControlName="isActive"
+                    (change)="onStatusChange($event)">
                   <label class="form-check-label" for="isActiveSwitch">
                     Active Status
                   </label>

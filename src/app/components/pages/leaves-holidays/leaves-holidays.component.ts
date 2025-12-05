@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HolidayService } from '../../../services/holiday.service';
-import { Holiday, HolidayCreateDto, HolidayUpdateDto, PreviewHoliday } from '../../../interfaces/holiday.inyerfact';
+import { Holiday, HolidayCreateDto, HolidayUpdateDto, PreviewHoliday } from '../../../interfaces/holiday.interface';
 
 @Component({
   selector: 'app-holiday',

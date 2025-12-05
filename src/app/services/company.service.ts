@@ -24,6 +24,9 @@ export class CompanyService {
     // });
     return this.http.post(`${this.API_URL}/SaveCompanySetting`, dto);
   }
+  getCompanyImagesUrl(Img: string){
+    return `${environment.webApiURL}/Files/CompanySettings/${Img}`;
+  }
 }
 
 

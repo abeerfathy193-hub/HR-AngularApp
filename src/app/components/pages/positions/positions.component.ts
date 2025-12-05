@@ -23,7 +23,7 @@ export class PositionsComponent implements OnInit {
   departments: IDepartment[] = [];
 
   currentPage: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 5;
   totalPages: number = 0;
 
   loading: boolean = false;
@@ -47,10 +47,11 @@ export class PositionsComponent implements OnInit {
     this.loadPositions();
   }
 
+
   loadDepartments(): void {
-    this.departmentService.getAll().subscribe({
+    this.departmentService.getAllActive().subscribe({
       next: (data: IDepartment[]) => {
-        this.departments = data.filter(dept => dept.isActive);
+        this.departments = data;
       },
       error: (err: any) => {
         console.error('Error loading departments', err);
@@ -77,34 +78,28 @@ export class PositionsComponent implements OnInit {
   applyPagination(): void {
     this.totalPages = Math.ceil(this.filteredPositions.length / this.itemsPerPage);
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
+    const endIndex = (startIndex + this.itemsPerPage) > this.filteredPositions.length ? this.filteredPositions.length : (startIndex + this.itemsPerPage);
+
     this.paginatedPositions = this.filteredPositions.slice(startIndex, endIndex);
   }
 
   onSearch(searchVal: string): void {
     if (searchVal) {
       const val = searchVal.toLowerCase().trim();
-      if (!val) {
-        this.filteredPositions = this.positions;
-      } else {
-        this.filteredPositions = this.positions.filter(pos =>
-          pos.title.toLowerCase().includes(val) ||
-          (pos.description && pos.description.toLowerCase().includes(val))
-        );
-        this.currentPage = 1;
-        this.applyPagination();
+      if (val) {
+        this.filteredPositions = this.positions.filter(pos => pos.title.toLowerCase().includes(val) || (pos.description && pos.description.toLowerCase().includes(val)));
       }
-    } else {
+    } else
       this.filteredPositions = this.positions;
-      this.currentPage = 1;
-      this.applyPagination();
-    }
+
+    this.currentPage = 1;
+    this.applyPagination();
   }
 
   onDepartmentFilterChange(departmentId: string): void {
     const deptId = departmentId ? parseInt(departmentId) : undefined;
     this.selectedDepartmentId = deptId;
-    
+
     if (deptId) {
       this.filteredPositions = this.positions.filter(pos => pos.departmentId === deptId);
     } else {
@@ -119,10 +114,6 @@ export class PositionsComponent implements OnInit {
       this.currentPage = page;
       this.applyPagination();
     }
-  }
-
-  getPaginationArray(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
   openCreateModal(): void {
@@ -145,7 +136,7 @@ export class PositionsComponent implements OnInit {
 
     this.PositionForm.patchValue({
       title: position.title,
-      description: position.description || '',
+      description: position.description,
       departmentId: position.departmentId,
     });
 
@@ -218,7 +209,6 @@ export class PositionsComponent implements OnInit {
     }
   }
 
-  // Close modal
   closeModal(): void {
     const modalElement = document.getElementById('positionModal')!;
     const modal = bootstrap.Modal.getInstance(modalElement);
@@ -227,14 +217,4 @@ export class PositionsComponent implements OnInit {
     }
   }
 
-  // Helper method to check if form field is invalid
-  isFieldInvalid(fieldName: string): boolean {
-    const field = this.PositionForm.get(fieldName);
-    return !!(field && field.invalid && field.touched);
-  }
-
-  getDepartmentName(departmentId: number): string {
-    const dept = this.departments.find(d => d.id === departmentId);
-    return dept ? dept.name : 'N/A';
-  }
 }
