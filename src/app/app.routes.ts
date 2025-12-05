@@ -23,6 +23,7 @@ import { ViewContractComponent } from './components/pages/contracts/contract.vie
 import { EditContractComponent } from './components/pages/contracts/contract.edit/contract.edit';
 import { EmployeeComponent } from './components/pages/employee-component/employee-component';
 import { AddEmployeeComponent } from './components/pages/employee-component/add-employee/add-employee.component';
+import { LeaveTypeComponent } from './components/pages/leavetypscomponant/leavetypscomponant';
 import { CompanyInfoComponent } from './components/pages/company-info/company-info.component';
 
 export const routes: Routes = [
@@ -66,6 +67,9 @@ export const routes: Routes = [
       { path: 'payroll', component: PayrollComponent },
       { path: 'attendance', component: AttendanceComponent },
       { path: 'vacancies', component: VacanciesComponent },
+       { path: 'Leavetyps', component: LeaveTypeComponent }
+    ]
+  }
       { path: 'requests', component: Requests },
       { path: 'requests/leaves', component: Leaves },
       { path: 'requests/resignations', component: Resignations },
