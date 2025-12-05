@@ -222,48 +222,48 @@ export class AddEmployeeComponent implements OnInit {
       this.isLoading = true;
       this.errorMessage = '';
       this.successMessage = '';
-
+debugger;
       const formData = new FormData();
 
       // Append password
       formData.append('password', this.employeeForm.value.password || '');
 
       // Append CreatePerson properties
-      formData.append('CreatePerson.FullName', this.employeeForm.value.fullName?.trim() || '');
-      formData.append('CreatePerson.BirthDate', this.employeeForm.value.birthDate || '');
-      formData.append('CreatePerson.Gender', this.employeeForm.value.gender || '');
-      formData.append('CreatePerson.Address', this.employeeForm.value.address?.trim() || '');
-      formData.append('CreatePerson.Country', this.employeeForm.value.country?.trim() || '');
-      formData.append('CreatePerson.MaritalStatus', this.employeeForm.value.maritalStatus || '');
-      formData.append('CreatePerson.Nationality', this.employeeForm.value.nationality?.trim() || '');
-      formData.append('CreatePerson.Education', this.employeeForm.value.education || '');
-      formData.append('CreatePerson.MilitaryStatus', this.employeeForm.value.militaryStatus || '');
-      formData.append('CreatePerson.Email', this.employeeForm.value.email?.trim() || '');
-      formData.append('CreatePerson.PhoneNumber', this.employeeForm.value.phoneNumber?.trim() || '');
-      formData.append('CreatePerson.UserName', this.employeeForm.value.userName?.trim() || '');
+      formData.append('CreatePersonDto.FullName', this.employeeForm.value.fullName? this.employeeForm.value.fullName.toString().trim() : '');
+      formData.append('CreatePersonDto.BirthDate', this.employeeForm.value.birthDate? this.employeeForm.value.birthDate.toString().trim() : '');
+      formData.append('CreatePersonDto.Gender', this.employeeForm.value.gender? this.employeeForm.value.gender.toString().trim() : '');
+      formData.append('CreatePersonDto.Address', this.employeeForm.value.address? this.employeeForm.value.address.toString().trim() : '');
+      formData.append('CreatePersonDto.Country', this.employeeForm.value.country? this.employeeForm.value.country.toString().trim() : '');
+      formData.append('CreatePersonDto.MaritalStatus', this.employeeForm.value.maritalStatus? this.employeeForm.value.maritalStatus.toString().trim() : '');
+      formData.append('CreatePersonDto.Nationality', this.employeeForm.value.nationality? this.employeeForm.value.nationality.toString().trim() : '');
+      formData.append('CreatePersonDto.Education', this.employeeForm.value.education? this.employeeForm.value.education.toString().trim() : '');
+      formData.append('CreatePersonDto.MilitaryStatus',this.employeeForm.value.militaryStatus? this.employeeForm.value.militaryStatus.toString().trim() : '');
+      formData.append('CreatePersonDto.Email',this.employeeForm.value.email? this.employeeForm.value.email.toString().trim() : '');
+      formData.append('CreatePersonDto.PhoneNumber', this.employeeForm.value.phoneNumber? this.employeeForm.value.phoneNumber.toString().trim() : '');
+      formData.append('CreatePersonDto.UserName', this.employeeForm.value.userName? this.employeeForm.value.userName.toString().trim() : '');
 
       // Append CreateEmployeeDto properties
       if (this.employeeForm.value.nationalId) {
-        formData.append('CreateEmployeeDto.NationalId', this.employeeForm.value.nationalId.trim());
-      }
+        formData.append('CreateEmployeeDto.NationalId', this.employeeForm.value.nationalId? this.employeeForm.value.nationalId.toString().trim() : '');
+      }else
       if (this.employeeForm.value.passPort) {
-        formData.append('CreateEmployeeDto.PassPort', this.employeeForm.value.passPort.trim());
+        formData.append('CreateEmployeeDto.PassPort', this.employeeForm.value.passPort? this.employeeForm.value.passPort.toString().trim() : '');
       }
       if (this.employeeForm.value.ssnId) {
-        formData.append('CreateEmployeeDto.SSNId', this.employeeForm.value.ssnId.trim());
+        formData.append('CreateEmployeeDto.SSNId', this.employeeForm.value.ssnId? this.employeeForm.value.ssnId.toString().trim() : '');
       }
-      if (this.employeeForm.value.personId) {
-        formData.append('CreateEmployeeDto.PersonId', this.employeeForm.value.personId.toString());
-      }
+      // if (this.employeeForm.value.personId) {
+      //   formData.append('CreateEmployeeDto.PersonId', this.employeeForm.value.personId.toString());
+      // }
       // if (this.employeeForm.value.contractId) {
       //   formData.append('CreateEmployeeDto.ContractId', this.employeeForm.value.contractId.toString());
       // }
       if (this.employeeForm.value.positionId) {
-        formData.append('CreateEmployeeDto.PositionId', this.employeeForm.value.positionId.toString());
+        formData.append('CreateEmployeeDto.PositionID', this.employeeForm.value.positionId? this.employeeForm.value.positionId.toString().trim() : '');
       }
 
       // Append Role
-      formData.append('Role.Name', this.employeeForm.value.roleName?.trim() || '');
+      formData.append('Role.Name', this.employeeForm.value.roleName? this.employeeForm.value.roleName.toString().trim() : '');
 
       // Append Person Files
       if (this.selectedImgFile) {
@@ -289,6 +289,7 @@ export class AddEmployeeComponent implements OnInit {
       if (this.selectedBirthCertificateFile) {
         formData.append('EmployeeFilesDto.BirthCertificateFile', this.selectedBirthCertificateFile, this.selectedBirthCertificateFile.name);
       }
+
 debugger;
       // Call the API
       this.employeeService.addEmployee(formData).subscribe({
