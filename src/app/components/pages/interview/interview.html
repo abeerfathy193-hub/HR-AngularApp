@@ -1,0 +1,160 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="header">
+      <h1>Schedule Interview</h1>
+      <p class="subtitle">Add interview details for applicant #{{ applicationId }}</p>
+    </div>
+
+
+
+    <!-- Error Message -->
+    <div class="alert alert-error" *ngIf="errorMessage">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="15" y1="9" x2="9" y2="15"></line>
+        <line x1="9" y1="9" x2="15" y2="15"></line>
+      </svg>
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="interviewForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <!-- Interviewer ID -->
+        <div class="form-group">
+          <label for="interviewerId">
+            Interviewer ID <span class="required">*</span>
+          </label>
+          <input
+            type="string"
+            id="interviewerId"
+            formControlName="interviewerId"
+            placeholder="Enter interviewer ID"
+            [class.error]="isFieldInvalid('interviewerId')"
+          />
+          <span class="error-text" *ngIf="isFieldInvalid('interviewerId')">
+            Interviewer ID is required
+          </span>
+        </div>
+
+        <!-- Interview Type -->
+        <div class="form-group">
+          <label for="interviewType">
+            Interview Type <span class="required">*</span>
+          </label>
+          <select
+            id="interviewType"
+            formControlName="interviewType"
+            [class.error]="isFieldInvalid('interviewType')"
+          >
+            <option value="" disabled>Select interview type</option>
+            <option value="Technical">Technical</option>
+            <option value="HR">HR</option>
+            <option value="Behavioral">Behavioral</option>
+            <option value="Final">Final</option>
+            <option value="Phone">Phone</option>
+          </select>
+          <span class="error-text" *ngIf="isFieldInvalid('interviewType')">
+            Interview type is required
+          </span>
+        </div>
+
+        <!-- Date -->
+        <div class="form-group">
+          <label for="scheduledDate">
+            Interview Date <span class="required">*</span>
+          </label>
+          <input
+            type="date"
+            id="scheduledDate"
+            formControlName="scheduledDate"
+            [class.error]="isFieldInvalid('scheduledDate')"
+          />
+          <span class="error-text" *ngIf="isFieldInvalid('scheduledDate')">
+            Interview date is required
+          </span>
+        </div>
+
+        <!-- Time -->
+        <div class="form-group">
+          <label for="scheduledTime">
+            Interview Time <span class="required">*</span>
+          </label>
+          <input
+            type="time"
+            id="scheduledTime"
+            formControlName="scheduledTime"
+            [class.error]="isFieldInvalid('scheduledTime')"
+          />
+          <span class="error-text" *ngIf="isFieldInvalid('scheduledTime')">
+            Interview time is required
+          </span>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group full-width">
+          <label for="location">
+            Location <span class="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="location"
+            formControlName="location"
+            placeholder="e.g., Conference Room A, Zoom Link, Office Building 3"
+            [class.error]="isFieldInvalid('location')"
+          />
+          <span class="error-text" *ngIf="isFieldInvalid('location')">
+            Location is required
+          </span>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group full-width">
+          <label for="notes">Additional Notes</label>
+          <textarea
+            id="notes"
+            formControlName="notes"
+            rows="4"
+            placeholder="Add any additional notes or instructions..."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onCancel()"
+          [disabled]="isLoading"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isLoading"
+        >
+          <span *ngIf="!isLoading">Schedule Interview</span>
+          <span *ngIf="isLoading" class="loading">
+            <span class="spinner"></span>
+            Scheduling...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-overlay" *ngIf="showSuccessModal" (click)="onSuccessModalClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10" stroke="#22c55e" fill="#f0fdf4"></circle>
+        <polyline points="9 12 11 14 15 10" stroke="#22c55e"></polyline>
+      </svg>
+    </div>
+    <h2>Success!</h2>
+    <p>Interview has been scheduled successfully</p>
+    <button class="btn btn-primary" (click)="onSuccessModalClose()">
+      OK
+    </button>
+  </div>
+</div>

@@ -13,12 +13,22 @@ import { AttendanceComponent } from './components/pages/attendance/attendance.co
 import { VacanciesComponent } from './components/pages/vacancies/vacancies.component';
 import { LoginComponent } from './components/pages/login/login.component';
 import { authGuard } from './guards/auth.guard';
+import { OpenVacancies } from './components/pages/open-vacancies/open-vacancies';
+import { ApplyForm } from './components/pages/apply-form/apply-form';
+import { MyApplications } from './components/pages/my-applications/my-applications';
+import { ApplicationDetails } from './components/pages/application-details/application-details';
+import { Interview } from './components/pages/interview/interview';
 
 export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
   },
+  { path: 'openvacancies', component: OpenVacancies },
+  { path: 'apply/:id', component: ApplyForm },
+  { path: 'my-applications', component: MyApplications },
+
+
   {
     path: '',
     component: LayoutComponent,
@@ -36,7 +46,14 @@ export const routes: Routes = [
       { path: 'employees-data', component: EmployeesDataComponent },
       { path: 'payroll', component: PayrollComponent },
       { path: 'attendance', component: AttendanceComponent },
-      { path: 'vacancies', component: VacanciesComponent }
+      { path: 'vacancies', component: VacanciesComponent },
+      { path: 'application-details/:id', component: ApplicationDetails },
+      { path: 'schedule-interview/:applicationId', component: Interview }
+
+
+
     ]
+    
   }
+  
 ];

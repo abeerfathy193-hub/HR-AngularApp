@@ -1,0 +1,229 @@
+<!-- my-applications.component.html -->
+<div class="page-container container py-5">
+  
+  <!-- Page Header -->
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+      <h2>My Applications</h2>
+      <p class="text-muted">Track and manage your job applications</p>
+    </div>
+    <button class="btn btn-primary" (click)="applyForNewJob()">
+      <i class="fas fa-plus me-2"></i>Apply for New Job
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading your applications...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && errorMessage" class="alert alert-danger" role="alert">
+    <i class="fas fa-exclamation-circle me-2"></i>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && !errorMessage && applications.length === 0" class="empty-state text-center py-5">
+    <i class="fas fa-folder-open fa-4x text-muted mb-4"></i>
+    <h4>No Applications Yet</h4>
+    <p class="text-muted mb-4">You haven't applied for any positions yet. Start exploring available opportunities!</p>
+    <button class="btn btn-primary" (click)="applyForNewJob()">
+      <i class="fas fa-search me-2"></i>Browse Jobs
+    </button>
+  </div>
+
+  <!-- Applications List -->
+  <div *ngIf="!isLoading && !errorMessage && applications.length > 0" class="applications-grid">
+    
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+      <div class="col-md-3 col-6 mb-3">
+        <div class="summary-card">
+          <i class="fas fa-file-alt"></i>
+          <div>
+            <h3>{{ totalApplications }}</h3>
+            <p>Total Applications</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3">
+        <div class="summary-card">
+          <i class="fas fa-clock"></i>
+          <div>
+            <h3>{{ pendingCount }}</h3>
+            <p>Pending Review</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3">
+        <div class="summary-card">
+          <i class="fas fa-user-tie"></i>
+          <div>
+            <h3>{{ interviewingCount }}</h3>
+            <p>Interviewing</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3">
+        <div class="summary-card">
+          <i class="fas fa-check-circle"></i>
+          <div>
+            <h3>{{ offersCount }}</h3>
+            <p>Offers</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Applications Cards -->
+    <div class="row">
+      <div class="col-12 mb-3" *ngFor="let app of applications">
+        <div class="card application-card">
+          <div class="card-body">
+            
+            <div class="application-header">
+              <div class="application-info">
+                <h5 class="application-title">
+                  Application #{{ app.id }}
+                  <span class="badge" [ngClass]="getStatusInfo(app.applicationStatus).class">
+                    <i class="fas" [ngClass]="getStatusInfo(app.applicationStatus).icon"></i>
+                    {{ getStatusInfo(app.applicationStatus).label }}
+                  </span>
+                </h5>
+                
+              </div>
+              <div class="application-date">
+                <small class="text-muted">Applied on</small>
+                <p class="mb-0"><strong>{{ formatDate(app.appliedAt) }}</strong></p>
+              </div>
+            </div>
+
+            <div class="application-details">
+              <div class="row">
+                
+                <div class="col-md-3 col-6 mb-3">
+                  <div class="detail-item">
+                    <i class="fas fa-dollar-sign "></i>
+                    <div>
+                      <small class="text-muted">Expected Salary</small>
+                      <p class="mb-0">{{ formatSalary(app.expectedSalary, app.salaryCurrency) }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-3 col-6 mb-3">
+                  <div class="detail-item">
+                    <i class="fas fa-calendar-check "></i>
+                    <div>
+                      <small class="text-muted">Available From</small>
+                      <p class="mb-0">{{ formatDate(app.availableFrom) }}</p>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-md-3 col-6 mb-3">
+                  <div class="detail-item">
+                    <i class="fas fa-briefcase "></i>
+                    <div>
+                      <small class="text-muted">Experience</small>
+                      <p class="mb-0">{{ app.yearsOfExperience || 0 }} years</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-3 col-6 mb-3">
+                  <div class="detail-item">
+                    <i class="fas" [ngClass]="getSourceInfo(app.applicationSource).icon"></i>
+                    <div>
+                      <small class="text-muted">Source</small>
+                      <p class="mb-0">{{ getSourceInfo(app.applicationSource).label }}</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row" *ngIf="app.noticePeriod || app.isOpenToRelocation">
+                
+                <div class="col-md-6 mb-2" *ngIf="app.noticePeriod">
+                  <small class="text-muted">
+                    <i class="fas fa-clock me-1"></i>Notice Period: 
+                    <strong>{{ app.noticePeriod }}</strong>
+                  </small>
+                </div>
+
+                <div class="col-md-6 mb-2" *ngIf="app.isOpenToRelocation">
+                  <small class="text-muted">
+                    <i class="fas fa-map-marker-alt me-1"></i>
+                    <strong>Open to Relocation</strong>
+                    <span *ngIf="app.preferredLocations"> - {{ app.preferredLocations }}</span>
+                  </small>
+                </div>
+
+              </div>
+
+              <div class="row" *ngIf="app.reviewedAt">
+                <div class="col-12">
+                  <small class="text-muted">
+                    <i class="fas fa-eye me-1"></i>Reviewed on: 
+                    <strong>{{ formatDate(app.reviewedAt) }}</strong>
+                    <span *ngIf="app.applicationRating" class="ms-2">
+                      <i class="fas fa-star text-warning"></i> Rating: {{ app.applicationRating }}/5
+                    </span>
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="app.applicationStatus && app.appliedAt">
+            <div class="col-12">
+                <div class="status-applied-section">
+                <div class="status-applied-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="status-applied-info">
+                    <small>Status Applied At</small>
+                    <p>
+                    <span class="me-3">
+                        <span class="badge me-2" [ngClass]="getStatusInfo(app.applicationStatus).class">
+                        <i class="fas" [ngClass]="getStatusInfo(app.applicationStatus).icon"></i>
+                        {{ getStatusInfo(app.applicationStatus).label }}
+                        </span>
+                        since {{ formatDate(app.appliedAt) }}
+                    </span>
+                    <span class="text-muted ms-3">
+                        <i class="fas fa-clock me-1"></i>
+                        {{ getDaysSince(app.appliedAt) }}
+                    </span>
+                    </p>
+                </div>
+                <div class="status-timeline-indicator">
+                    <i class="fas fa-hourglass-half fa-lg" 
+                    [style.color]="getTimelineColor(app.appliedAt)"></i>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div class="application-actions">
+              <!-- <button class="btn btn-sm btn-outline-primary" (click)="viewDetails(app.id!)">
+                <i class="fas fa-eye me-1"></i>View Details
+              </button> -->
+              <button 
+                class="btn btn-sm btn-outline-danger" 
+                (click)="withdrawApplication(app)"
+                [disabled]="!canWithdraw(app.applicationStatus)">
+                <i class="fas fa-times me-1"></i>Withdraw
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

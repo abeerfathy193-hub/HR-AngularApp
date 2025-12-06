@@ -1,0 +1,216 @@
+<!-- application-form.component.html -->
+<div class="page-container container py-5">
+  <div class="page-header">
+    <h2>Job Application Form</h2>
+    <p class="text-muted">Please fill in all required fields to submit your application</p>
+  </div>
+
+  <form [formGroup]="applicationForm" (ngSubmit)="onSubmit()">
+    
+    <!-- Experience Section -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-briefcase me-2"></i>Professional Experience
+        </h5>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Years of Experience <span class="text-danger">*</span></label>
+            <input 
+              type="number" 
+              class="form-control" 
+              formControlName="yearsOfExperience"
+              [class.is-invalid]="submitted && f['yearsOfExperience'].errors"
+              placeholder="Enter years of experience"
+              min="0">
+            <div class="invalid-feedback" *ngIf="submitted && f['yearsOfExperience'].errors">
+              <div *ngIf="f['yearsOfExperience'].errors['required']">Years of experience is required</div>
+              <div *ngIf="f['yearsOfExperience'].errors['min']">Years of experience must be 0 or greater</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Salary Expectations Section -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-dollar-sign me-2"></i>Salary Expectations
+        </h5>
+        
+        <div class="row">
+          <div class="col-md-8 mb-3">
+            <label class="form-label">Expected Salary <span class="text-danger">*</span></label>
+            <input 
+              type="number" 
+              class="form-control" 
+              formControlName="expectedSalary"
+              [class.is-invalid]="submitted && f['expectedSalary'].errors"
+              placeholder="Enter expected salary"
+              min="0">
+            <div class="invalid-feedback" *ngIf="submitted && f['expectedSalary'].errors">
+              <div *ngIf="f['expectedSalary'].errors['required']">Expected salary is required</div>
+              <div *ngIf="f['expectedSalary'].errors['min']">Salary must be greater than 0</div>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Currency <span class="text-danger">*</span></label>
+            <select 
+              class="form-select" 
+              formControlName="salaryCurrency"
+              [class.is-invalid]="submitted && f['salaryCurrency'].errors">
+              <option value="">Select Currency</option>
+              <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="submitted && f['salaryCurrency'].errors">
+              Currency is required
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Availability Section -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-calendar-check me-2"></i>Availability
+        </h5>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Available From <span class="text-danger">*</span></label>
+            <input 
+              type="date" 
+              class="form-control" 
+              formControlName="availableFrom"
+              [class.is-invalid]="submitted && f['availableFrom'].errors">
+            <div class="invalid-feedback" *ngIf="submitted && f['availableFrom'].errors">
+              Available from date is required
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Notice Period <span class="text-danger">*</span></label>
+            <select 
+              class="form-select" 
+              formControlName="noticePeriod"
+              [class.is-invalid]="submitted && f['noticePeriod'].errors">
+              <option value="">Select Notice Period</option>
+              <option *ngFor="let period of noticePeriods" [value]="period">{{ period }}</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="submitted && f['noticePeriod'].errors">
+              Notice period is required
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Relocation Section -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-map-marker-alt me-2"></i>Relocation Preferences
+        </h5>
+        
+        <div class="row">
+          <div class="col-12 mb-3">
+            <div class="form-check">
+              <input 
+                class="form-check-input" 
+                type="checkbox" 
+                formControlName="isOpenToRelocation"
+                id="relocationCheck">
+              <label class="form-check-label" for="relocationCheck">
+                I am open to relocation
+              </label>
+            </div>
+          </div>
+
+          <div class="col-12 mb-3" *ngIf="f['isOpenToRelocation'].value">
+            <label class="form-label">Preferred Locations</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              formControlName="preferredLocations"
+              placeholder="e.g., Cairo, Alexandria, Remote">
+            <small class="text-muted">Separate multiple locations with commas</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Source Section -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-info-circle me-2"></i>How Did You Hear About Us?
+        </h5>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Application Source</label>
+            <select 
+              class="form-select" 
+              formControlName="applicationSource"
+              [class.is-invalid]="submitted && f['applicationSource'].errors">
+              <option *ngFor="let source of applicationSources" [value]="source.value">
+                {{ source.label }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="submitted && f['applicationSource'].errors">
+              Application source is required
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3" *ngIf="f['applicationSource'].value === ApplicationSource.Other">
+            <label class="form-label">Please Specify <span class="text-danger">*</span></label>
+            <input 
+              type="text" 
+              class="form-control" 
+              formControlName="otherSource"
+              [class.is-invalid]="submitted && f['otherSource'].errors"
+              placeholder="Please specify the source">
+            <div class="invalid-feedback" *ngIf="submitted && f['otherSource'].errors">
+              Please specify the source
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="d-flex justify-content-end gap-3 mt-4">
+      <button type="button" class="btn btn-secondary px-4" (click)="onCancel()" [disabled]="isLoading">
+        <i class="fas fa-times me-2"></i>Cancel
+      </button>
+      <button type="submit" class="btn btn-primary px-4" [disabled]="isLoading">
+        <span *ngIf="!isLoading">
+          <i class="fas fa-paper-plane me-2"></i>Submit Application
+        </span>
+        <span *ngIf="isLoading">
+          <i class="fas fa-spinner fa-spin me-2"></i>Submitting...
+        </span>
+      </button>
+    </div>
+  </form>
+
+   <div class="modal-overlay" *ngIf="showSuccessModal" (click)="onSuccessModalClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10" stroke="#22c55e" fill="#f0fdf4"></circle>
+        <polyline points="9 12 11 14 15 10" stroke="#22c55e"></polyline>
+      </svg>
+    </div>
+    <h2>Success!</h2>
+    <p> Applied successfully</p>
+    <button class="btn btn-primary" (click)="onSuccessModalClose()">
+      OK
+    </button>
+  </div>
+</div>
