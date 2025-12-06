@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RequestsService } from '../../../services/requests.service';
 import { RouterLink, RouterModule } from '@angular/router';
+import { UserTemp } from '../../../services/userTemp.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,14 +27,30 @@ export class DashboardComponent implements OnInit {
     3: 'Cancelled',
   };
 
-  constructor(private requestsService: RequestsService) {}
+  id: any;
+  empId: any;
+
+  constructor(private requestsService: RequestsService, private userService: UserTemp) {}
 
   ngOnInit(): void {
-    this.loadPendingRequests();
+    this.id = this.userService.getUserId();
+    console.log('User Id:', this.id);
+
+    this.userService.getEmp(this.id).subscribe({
+      next: (data) => {
+        console.log('API Response:', data); // <-- you will see it here
+        this.empId = data.employee.id;
+        console.log('Employee ID:', this.empId);
+        this.loadPendingRequests(this.empId);
+      },
+      error: (err) => {
+        console.error('Error fetching employee:', err);
+      },
+    });
   }
   // ====================
-  loadPendingRequests() {
-    this.requestsService.GetRequestsForApproval(1).subscribe({
+  loadPendingRequests(id: number) {
+    this.requestsService.GetRequestsForApproval(id).subscribe({
       next: (res) => {
         const data = Array.isArray(res) ? res : res.result;
         this.pendingRequests = (data ?? []).map((r: any) => ({
@@ -57,12 +74,12 @@ export class DashboardComponent implements OnInit {
         const dto = {
           Id: req.id,
           NewStatus: newStatus,
-          UpdatedByUserId: 1, // logged-in HR/admin ===================
+          UpdatedByUserId: this.empId, // logged-in HR/admin ===================
         };
         this.requestsService.updateRequestStatus(req.type, dto).subscribe({
           next: () => {
             // refresh the table
-            this.loadPendingRequests();
+            this.loadPendingRequests(this.empId);
           },
           error: (err) => console.error(err),
         });
@@ -75,12 +92,12 @@ export class DashboardComponent implements OnInit {
         const dto = {
           Id: req.id,
           NewStatus: newStatus,
-          UpdatedByUserId: 1, // logged-in HR/admin ===================
+          UpdatedByUserId: this.empId, // logged-in HR/admin ===================
         };
         this.requestsService.updateRequestStatus(req.type, dto).subscribe({
           next: () => {
             // refresh the table
-            this.loadPendingRequests();
+            this.loadPendingRequests(this.empId);
           },
           error: (err) => console.error(err),
         });

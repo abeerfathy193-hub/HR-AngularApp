@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 
 export interface Employee {
@@ -59,8 +60,24 @@ export interface UserData {
 export class UserTemp {
   constructor(private http: HttpClient) {}
   private Url = 'http://localhost:5220/api/Employee/Employees';
+  private personUrl = 'http://localhost:5220/api/Employee/Employees/person';
 
-  getUserData(): Observable<UserData> {
-    return this.http.get<UserData>(`${this.Url}/1`);
+  getUserData(id: any): Observable<UserData> {
+    return this.http.get<UserData>(`${this.Url}/${id}`);
+  }
+  getEmp(id: any) {
+    return this.http.get<UserData>(`${this.personUrl}/${id}`);
+  }
+
+  getUserId(): string | null {
+    const token = localStorage.getItem('authToken'); // or sessionStorage
+    if (!token) return null;
+
+    const decoded: any = jwtDecode(token);
+    return (
+      decoded['nameid'] ||
+      decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ||
+      null
+    );
   }
 }

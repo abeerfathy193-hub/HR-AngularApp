@@ -28,8 +28,8 @@ export class Hrletters {
       reason: ['', Validators.required],
       extraDetails: [''],
       attachment: [''],
-      firstApproveId: ['', Validators.required],
-      secondApproveId: [''],
+      firstApproveId: [null, Validators.required],
+      secondApproveId: [null],
     });
   }
 

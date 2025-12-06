@@ -25,6 +25,8 @@ export class Requests implements OnInit {
   employee: Employee | null = null;
   person: Person | null = null;
   isLoading: boolean = false;
+  id: any;
+  empId: any;
 
   StatusMap: { [key: string]: string } = {
     '0': 'Pending',
@@ -36,16 +38,32 @@ export class Requests implements OnInit {
   constructor(private requestsService: RequestsService, private userService: UserTemp) {}
 
   ngOnInit(): void {
-    this.userService.getUserData().subscribe((data) => {
-      this.employee = data.employee;
-      this.person = data.person;
-      this.loadRequests();
+    // this.userService.getUserData().subscribe((data) => {
+    //   this.employee = data.employee;
+    //   this.person = data.person;
+
+    // });
+    this.id = this.userService.getUserId();
+    console.log('User Id:', this.id);
+
+    this.userService.getEmp(this.id).subscribe({
+      next: (data) => {
+        console.log('API Response:', data); // <-- you will see it here
+        this.empId = data.employee.id;
+        console.log('Employee ID:', this.empId);
+        this.loadRequests(this.empId);
+      },
+      error: (err) => {
+        console.error('Error fetching employee:', err);
+      },
     });
+    // this.loadRequests();
   }
 
-  loadRequests() {
+  loadRequests(id: number) {
     this.isLoading = true;
-    this.requestsService.GetRequestsByEmployeeID(1).subscribe({
+
+    this.requestsService.GetRequestsByEmployeeID(id).subscribe({
       next: (req) => {
         this.allRequests = req.result.map((r: any) => ({
           id: r.id,
@@ -69,7 +87,7 @@ export class Requests implements OnInit {
       this.requestsService.cancelRequest(requestId, requestType, 1).subscribe({
         next: () => {
           alert('Request canceled successfully!');
-          this.loadRequests();
+          // this.loadRequests();
         },
         error: (err) => {
           console.error(err);
