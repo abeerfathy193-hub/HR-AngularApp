@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -31,13 +31,11 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Redirect if already authenticated
-    if (this.authService.isAuthenticated()) {
+    if (this.authService.isAuthenticated) {
       this.router.navigate([this.returnUrl]);
       return;
     }
 
-    // Get return url from route parameters or default to '/dashboard'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
@@ -52,9 +50,9 @@ export class LoginComponent implements OnInit {
         rememberMe: this.loginForm.value.rememberMe
       };
 
-      this.authService.login(credentials, this.loginForm.value.rememberMe).subscribe({
-        next: () => {
-          // Navigate to return URL or dashboard
+      this.authService.login(credentials).subscribe({
+        next: (data) => {
+          this.authService.setCredentials(data, this.loginForm.value.rememberMe);
           this.router.navigate([this.returnUrl]);
           this.isLoading = false;
         },
@@ -65,7 +63,6 @@ export class LoginComponent implements OnInit {
         }
       });
     } else {
-      // Mark all fields as touched to show validation errors
       Object.keys(this.loginForm.controls).forEach(key => {
         this.loginForm.get(key)?.markAsTouched();
       });
@@ -87,18 +84,6 @@ export class LoginComponent implements OnInit {
   onSocialLogin(provider: 'google' | 'facebook' | 'microsoft'): void {
     this.isLoading = true;
     this.errorMessage = '';
-
-    this.authService.socialLogin(provider).subscribe({
-      next: () => {
-        this.router.navigate([this.returnUrl]);
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.errorMessage = error.error?.message || `${provider} login failed. Please try again.`;
-        console.error(`${provider} login error:`, error);
-      }
-    });
   }
 }
 

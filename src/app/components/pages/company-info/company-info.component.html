@@ -46,6 +46,31 @@
                 <input type="tel" class="form-control" formControlName="ContactPhone" placeholder="+1234567890">
               </div>
             </div>
+            <div class="section-header mb-3 mt-4">
+              <h6 class="border-bottom pb-2">Shift Hours</h6>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Work Start Time <span class="text-danger">*</span></label>
+                <input type="number" class="form-control" formControlName="WorkStartTime"
+                  [class.is-invalid]="CompanyForm.controls['WorkStartTime'].invalid && CompanyForm.controls['WorkStartTime'].touched"
+                  placeholder="9:00">
+                @if(CompanyForm.controls['WorkStartTime'].invalid &&
+                CompanyForm.controls['WorkStartTime'].touched){
+                <div class="invalid-feedback">Work Start Time is required</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Work End Time <span class="text-danger">*</span></label>
+                <input type="number" class="form-control" formControlName="WorkEndTime"
+                  [class.is-invalid]="CompanyForm.controls['WorkEndTime'].invalid && CompanyForm.controls['WorkEndTime'].touched"
+                  placeholder="17:00">
+                @if(CompanyForm.controls['WorkEndTime'].invalid &&
+                CompanyForm.controls['WorkEndTime'].touched){
+                <div class="invalid-feedback">Work End Time must greater than Work Start Time</div>
+                }
+              </div>
+            </div>
 
             <div class="section-header mb-3 mt-4">
               <h6 class="border-bottom pb-2">Legal Information</h6>

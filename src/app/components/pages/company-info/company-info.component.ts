@@ -1,13 +1,12 @@
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { CompanyService } from '../../../services/company.service';
 import * as L from 'leaflet';
 declare var bootstrap: any;
 
 
-import { icon, Marker } from 'leaflet';
-import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-company-info',
@@ -31,7 +30,9 @@ export class CompanyInfoComponent implements OnInit {
     CompanyHeader: new FormControl(''),
     CompanyFooter: new FormControl(''),
     TaxRegistrationNumber: new FormControl('', Validators.required),
-    CommercialNumber: new FormControl('', Validators.required)
+    CommercialNumber: new FormControl('', Validators.required),
+    WorkStartTime: new FormControl<number | null>(null, [Validators.required]),
+    WorkEndTime: new FormControl<number | null>(null, [Validators.required, this.checkTime()])
   });
 
   companyId?: number;
@@ -67,9 +68,21 @@ export class CompanyInfoComponent implements OnInit {
   onFooterSelected(event: any): void {
     this.selectedFooter = event.target.files[0] as File;
   }
+  checkTime(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+      const endVal = control.value;
+      const startVal = this.CompanyForm.value.WorkStartTime;
+      if (startVal) {
+        if(startVal >= endVal) 
+          return { invalidTimeRange: true };
+      }
+      return null;
+    };
+  }
   loadCompany() {
     this.loading = true;
-    this.companyService.GetCompanySetting().subscribe({
+    this.companyService.getCompanySetting().subscribe({
       next: (data) => {
         this.companyId = data.id;
         this.latitude = data.latitude;
@@ -84,11 +97,13 @@ export class CompanyInfoComponent implements OnInit {
           Latitude: data.latitude,
           Longitude: data.longitude,
           AllowedRadiusMeters: data.allowedRadiusMeters,
-          CompanyLogo: data.companyLogo ? `${environment.webApiURL}/Files/CompanySettings/${data.companyLogo}` : '',
-          CompanyHeader: data.companyHeader ? `${environment.webApiURL}/Files/CompanySettings/${data.companyHeader}` : '',
-          CompanyFooter: data.companyFooter ? `${environment.webApiURL}/Files/CompanySettings/${data.companyFooter}` : '',
+          CompanyLogo: data.companyLogo ? this.companyService.getCompanyImagesUrl(data.companyLogo) : '',
+          CompanyHeader: data.companyHeader ? this.companyService.getCompanyImagesUrl(data.companyHeader) : '',
+          CompanyFooter: data.companyFooter ? this.companyService.getCompanyImagesUrl(data.companyFooter) : '',
           TaxRegistrationNumber: data.taxRegistrationNumber,
-          CommercialNumber: data.commercialNumber
+          CommercialNumber: data.commercialNumber,
+          WorkStartTime: data.workStartTime,
+          WorkEndTime: data.workEndTime
         });
         this.loading = false;
       },
@@ -116,10 +131,10 @@ export class CompanyInfoComponent implements OnInit {
       if (this.selectedFooter)
         formData.append('footerFile', this.selectedFooter, this.selectedFooter.name);
 
-      console.log('FormData contents:');
-      formData.forEach((value, key) => {
-        console.log(key, ':', value);
-      });
+      // console.log('FormData contents:');
+      // formData.forEach((value, key) => {
+      //   console.log(key, ':', value);
+      // });
       // const companyObj = {
       //   id: this.companyId,
       //   companyName: this.CompanyForm.value.CompanyName?.trim(),
@@ -142,9 +157,10 @@ export class CompanyInfoComponent implements OnInit {
       // } as ICompanyUpdated;
 
       this.loading = true;
-      this.companyService.SaveCompanySetting(formData).subscribe({
+      this.companyService.saveCompanySetting(formData).subscribe({
         next: (data) => {
           this.loading = false;
+          alert('Company information saved successfully.');
           this.loadCompany();
         },
         error: (err) => {
@@ -202,7 +218,6 @@ export class CompanyInfoComponent implements OnInit {
     debugger
     this.latitude = Number(lat.toFixed(6));
     this.longitude = Number(lng.toFixed(6));
-    // this.CompanyForm.value.Address = 'Loading...';
 
 
     if (this.marker) {
@@ -288,5 +303,3 @@ export class CompanyInfoComponent implements OnInit {
   }
 
 }
-
-

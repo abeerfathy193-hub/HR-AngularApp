@@ -1,0 +1,69 @@
+<div class="page-container">
+    <div class="page-header">
+        <h2>Requests</h2>
+
+        <table id="main-table" class="text-center">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Employee</th>
+                    <th>Type</th>
+                    <th>Submitted On</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (allRequests.length > 0) {
+                @for (r of allRequests; track r.id) {
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{r.name}}</td>
+                    <td>{{r.type}}</td>
+                    <td>{{ r.date | date:"medium"}}</td>
+                    <td>
+                        <span [ngClass]="{
+                        'badge-pending': r.status === 'Pending',
+                        'badge-approved': r.status === 'Approved',
+                        'badge-rejected': r.status === 'Rejected'
+                        }">{{ r.status }}
+                        </span>
+                    </td>
+                    <td>
+                        @if(r.status == "Pending")
+                        {
+                        <a class="request-action-btn edit" [routerLink]="['/requests/view', r.id, r.type]">View</a>
+                        <a class="request-action-btn cancel" (click)="cancelRequest(r.id, r.type)">Cancel</a>
+                        }
+                        @else if(r.status == "Cancelled")
+                        {
+                        No Action
+                        }
+                        @else {
+                        <a class="request-action-btn edit" [routerLink]="['/requests/view', r.id, r.type]">View</a>
+                        }
+                    </td>
+                </tr>
+                }
+                } @else {
+                <tr>
+                    <td colspan="7">No Data</td>
+                </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Requests Management</h5>
+            <div class="d-flex gap-5 ">
+                <a class="button-class" routerLink="/requests/leaves">Add Leave</a>
+                <a class="button-class" routerLink="/requests/resignations">Add Resignation</a>
+                <a class="button-class" routerLink="/requests/hrletters">Add HR Letter</a>
+            </div>
+        </div>
+    </div>
+</div>

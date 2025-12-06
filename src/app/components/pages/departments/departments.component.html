@@ -1,139 +1,220 @@
 <div class="page-container">
-  <div class="page-header">
-    <h2>Departments</h2>
-    <p class="text-muted">Manage company departments</p>
-  </div>
-
-  @if (error) {
-    <div class="alert alert-danger" role="alert">
-      {{ error }}
-    </div>
-  }
-
   <div class="row">
-    <!-- Departments List -->
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Departments</h5>
-          <button class="btn btn-sm btn-primary" (click)="startCreate()" [disabled]="loading">
-            <i class="bi bi-plus-circle"></i> New
-          </button>
-        </div>
-        <div class="card-body p-0">
-          @if (loading && departments.length === 0) {
-            <div class="text-center p-3">
-              <div class="spinner-border spinner-border-sm" role="status"></div>
+    <div class="col-md-12">
+      <div class="card shadow-sm mb-3">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <h4 class="mb-0">
+                <i class="bi bi-diagram-3 me-2"></i>
+                Departments Management
+              </h4>
             </div>
-          } @else {
-            <ul class="list-group list-group-flush">
-              @for (department of departments; track department.id) {
-                <li class="list-group-item list-group-item-action" 
-                    [class.active]="selectedDepartment?.id === department.id"
-                    (click)="selectDepartment(department)">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                      <strong>{{ department.name }}</strong>
-                      @if (department.managerName) {
-                        <div class="text-muted small">Manager: {{ department.managerName }}</div>
-                      }
-                    </div>
-                    <button class="btn btn-sm btn-outline-danger" 
-                            (click)="deleteDepartment(department.id); $event.stopPropagation()">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </div>
-                </li>
-              }
-            </ul>
-          }
-        </div>
-      </div>
-    </div>
-
-    <!-- Department Details Form -->
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">
-            @if (isCreating) {
-              Create New Department
-            } @else if (isEditing) {
-              Edit Department
-            } @else {
-              Department Details
-            }
-          </h5>
-          @if (!isCreating && !isEditing && selectedDepartment) {
-            <div>
-              <button class="btn btn-sm btn-primary me-2" (click)="startEdit()">
-                <i class="bi bi-pencil"></i> Edit
+            <div class="col-md-6 text-end">
+              <button class="btn btn-success rounded-pill" (click)="openCreateModal()">
+                <i class="bi bi-plus-circle me-2"></i>Add New Department
               </button>
             </div>
-          }
+          </div>
         </div>
+      </div>
+
+      <div class="card shadow-sm mb-3">
         <div class="card-body">
-          @if (!selectedDepartment && !isCreating) {
-            <p class="text-muted">Select a department from the list or create a new one.</p>
-          } @else {
-            <form (ngSubmit)="save()">
-              <div class="mb-3">
-                <label class="form-label">Department Name <span class="text-danger">*</span></label>
-                <input type="text" 
-                       class="form-control" 
-                       [(ngModel)]="formData.name" 
-                       name="name"
-                       [readonly]="!isCreating && !isEditing"
-                       required>
+          <div class="row g-2">
+            <div class="col-md-6">
+              <div class="input-group">
+                <span class="input-group-text bg-white">
+                  <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control" placeholder="Search by department name or code..."
+                  (input)="onSearch(searchInput.value)" #searchInput>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-              <div class="mb-3">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" 
-                          rows="3" 
-                          [(ngModel)]="formData.description" 
-                          name="description"
-                          [readonly]="!isCreating && !isEditing"></textarea>
-              </div>
-
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <label class="form-label">Manager ID</label>
-                  <input type="number" 
-                         class="form-control" 
-                         [(ngModel)]="formData.managerId" 
-                         name="managerId"
-                         [readonly]="!isCreating && !isEditing">
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label">Company ID</label>
-                  <input type="number" 
-                         class="form-control" 
-                         [(ngModel)]="formData.companyId" 
-                         name="companyId"
-                         [readonly]="!isCreating && !isEditing">
-                </div>
-              </div>
-
-              @if (isCreating || isEditing) {
-                <div class="d-flex gap-2">
-                  <button type="submit" class="btn btn-primary" [disabled]="loading">
-                    @if (loading) {
-                      <span class="spinner-border spinner-border-sm me-2"></span>
-                    }
-                    Save
-                  </button>
-                  <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="loading">
-                    Cancel
-                  </button>
-                </div>
-              }
-            </form>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          @if(loading){
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Loading departments...</p>
+          </div>
           }
+          @else {
+          @if (paginatedDepartments.length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-inbox display-1 text-muted"></i>
+            <p class="mt-3 text-muted">No departments found</p>
+          </div>
+          }
+          @else {
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 5%">#</th>
+                  <th style="width: 12%">Code</th>
+                  <th style="width: 20%">Department Name</th>
+                  <th style="width: 25%">Description</th>
+                  <th style="width: 15%">Manager</th>
+                  <th style="width: 10%">Status</th>
+                  <th style="width: 13%" class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let dept of paginatedDepartments; let i = index">
+                  <td>{{ ((currentPage - 1) * itemsPerPage) + (i + 1) }}</td>
+                  <td>
+                    <span class="badge bg-secondary">{{ dept.code }}</span>
+                  </td>
+                  <td>
+                    <strong>{{ dept.name }}</strong>
+                  </td>
+                  <td>
+                    <small class="text-muted">{{ dept.description || 'N/A' }}</small>
+                  </td>
+                  <td>
+                    <span *ngIf="dept.managerName">
+                      <i class="bi bi-person-circle me-1"></i>{{ dept.managerName }}
+                    </span>
+                    <span *ngIf="!dept.managerName" class="text-muted">
+                      <i>Not assigned</i>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge" [ngClass]="dept.isActive ? 'bg-success' : 'bg-danger'">
+                      {{ dept.isActive ? 'Active' : 'Inactive' }}</span>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-sm btn-outline-success" (click)="openEditModal(dept)" [disabled]="loading"
+                        title="Edit">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" (click)="deleteDepartment(dept)"
+                        [disabled]="loading" title="Delete">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          }
+          }
+
+
+
+
+
+          <div *ngIf="!loading && totalPages > 1" class="d-flex justify-content-between align-items-center mt-3">
+            <div class="text-muted">
+              Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+              {{ (currentPage * itemsPerPage) < filteredDepartments.length? (currentPage * itemsPerPage) :
+                filteredDepartments.length }} of {{ filteredDepartments.length }} entries </div>
+                <nav>
+                  <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                      <a class="page-link" (click)="goToPage(currentPage - 1)">
+                        <i class="bi bi-chevron-left"></i>
+                      </a>
+                    </li>
+
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                      <a class="page-link" (click)="goToPage(currentPage + 1)">
+                        <i class="bi bi-chevron-right"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
+  <div class="modal fade" id="departmentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header text-white">
+          <h5 class="modal-title">
+            <i class="bi me-2" [ngClass]="isEditMode ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
+            {{ isEditMode ? 'Edit Department' : 'Add New Department' }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
 
+        <form [formGroup]="DepartmentForm" (submit)="saveDepartment()">
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">
+                  Department Code <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control" formControlName="code"
+                  [class.is-invalid]="DepartmentForm.controls['code'].invalid && DepartmentForm.controls['code'].touched"
+                  placeholder="e.g., IT, HR">
+                @if(DepartmentForm.controls['code'].invalid && DepartmentForm.controls['code'].touched){
+                <div class="invalid-feedback">
+                  Code is required (min 2 characters)
+                </div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">
+                  Department Name <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control" formControlName="name"
+                  [class.is-invalid]="DepartmentForm.controls['name'].invalid && DepartmentForm.controls['name'].touched"
+                  placeholder="e.g., Information Technology">
+                @if(DepartmentForm.controls['name'].invalid && DepartmentForm.controls['name'].touched){
+                <div class="invalid-feedback">
+                  Name is required (min 3 characters)
+                </div>
+                }
+
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="3" formControlName="description"
+                  placeholder="Enter department description..."></textarea>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="isActiveSwitch" formControlName="isActive"
+                    (change)="onStatusChange($event)">
+                  <label class="form-check-label" for="isActiveSwitch">
+                    Active Status
+                  </label>
+                </div>
+                <small class="text-muted">
+                  Inactive departments will be hidden from selection lists
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" [disabled]="loading">
+              <i class="bi bi-x-circle me-1"></i> Cancel
+            </button>
+            <button type="submit" class="btn btn-success rounded-pill" [disabled]="loading || DepartmentForm.invalid">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!loading" class="bi bi-check-circle me-1"></i>
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

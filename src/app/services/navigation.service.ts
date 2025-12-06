@@ -2,9 +2,8 @@ import { Injectable, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { BreadcrumbItem } from '../interfaces/breadcrumb.interface';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NavigationService {
   private _currentPageTitle = signal<string>('Dashboard');
@@ -15,16 +14,25 @@ export class NavigationService {
 
   private routeTitleMap: Record<string, string> = {
     '/dashboard': 'Dashboard',
+    '/company-data': 'Company Data',
     '/company-data/company-info': 'Company Info',
     '/company-data/departments': 'Departments',
     '/company-data/positions': 'Positions',
     '/contracts': 'Contracts',
+
     '/leaves-holidays': 'Leaves & Holidays',
     '/employees-data': 'Employees Data',
+    '/employees-data/employees': 'Employees Info',
+
     '/payroll': 'Payroll',
     '/attendance': 'Attendance',
     '/vacancies': 'Vacancies',
-    '/reports': 'Reports'
+    '/reports': 'Reports',
+    '/requests': 'Request',
+    '/requests/leaves': 'Leaves',
+    '/requests/resignations': 'Resignations',
+    '/requests/hrletters': 'HR Letters',
+    '/requests/view/:id': 'View Request',
   };
 
   constructor(private router: Router) {
@@ -32,7 +40,7 @@ export class NavigationService {
     this.updateBreadcrumbs(currentUrl);
     this.updatePageTitle(currentUrl);
 
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.updateBreadcrumbs(event.url);
         this.updatePageTitle(event.url);
@@ -47,11 +55,11 @@ export class NavigationService {
 
   private updateBreadcrumbs(url: string): void {
     const breadcrumbs: BreadcrumbItem[] = [
-      { label: 'Home', url: '/dashboard' } // start From Dashboard
+      { label: 'Home', url: '/dashboard' }, // start From Dashboard
     ];
 
     if (url !== '/dashboard') {
-      const segments = url.split('/').filter(segment => segment);
+      const segments = url.split('/').filter((segment) => segment);
       let currentPath = '';
 
       segments.forEach((segment, index) => {
@@ -64,11 +72,10 @@ export class NavigationService {
     this._breadcrumbs.set(breadcrumbs);
   }
 
-  private formatLabel(segment: string): string { 
+  private formatLabel(segment: string): string {
     return segment
       .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
 }
-

@@ -1,32 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-
-export interface Department {
-  id: number;
-  name: string;
-  description?: string;
-  managerId?: number;
-  managerName?: string;
-  companyId?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface DepartmentCreateDto {
-  name: string;
-  description?: string;
-  managerId?: number;
-  companyId?: number;
-}
-
-export interface DepartmentUpdateDto {
-  name?: string;
-  description?: string;
-  managerId?: number;
-  companyId?: number;
-}
+import { IDepartment, IDepartmentCreate, IDepartmentUpdate } from '../interfaces/department.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -36,24 +11,23 @@ export class DepartmentService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Department[]> {
-    return this.http.get<Department[]>(this.API_URL);
+  getAll() {
+    return this.http.get<IDepartment[]>(`${this.API_URL}/GetAll`);
   }
-
-  getById(id: number): Observable<Department> {
-    return this.http.get<Department>(`${this.API_URL}/${id}`);
+  getAllActive() {
+    return this.http.get<IDepartment[]>(`${this.API_URL}/GetAllActive`);
   }
-
-  create(dto: DepartmentCreateDto): Observable<Department> {
-    return this.http.post<Department>(this.API_URL, dto);
+  getById(id: number) {
+    return this.http.get<IDepartment>(`${this.API_URL}/GetDepartmentById/${id}`);
   }
-
-  update(id: number, dto: DepartmentUpdateDto): Observable<Department> {
-    return this.http.put<Department>(`${this.API_URL}/${id}`, dto);
+  create(dto: IDepartmentCreate) {
+    return this.http.post(`${this.API_URL}/CreateDepartment`, dto);
   }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  update(dto: IDepartmentUpdate) {
+    return this.http.put(`${this.API_URL}/UpdateDepartment`, dto);
+  }
+  delete(id: number) {
+    return this.http.delete(`${this.API_URL}/DeleteDepartment/${id}`);
   }
 }
 

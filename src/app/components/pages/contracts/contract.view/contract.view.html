@@ -1,0 +1,115 @@
+    <div class="page-container">
+    <div class="page-header">
+        <h2>Contract Details</h2>
+        <p class="text-muted">View contract information</p>
+    </div>
+
+    <div class="card" *ngIf="contract">
+        <div class="card-body">
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-secondary me-2" (click)="goBack()">Back</button>
+            <button class="btn btn-warning me-2" (click)="editContract()">Edit</button>
+            <button class="btn btn-danger" (click)="deleteContract()">Delete</button>
+        </div>
+
+        <!-- Contract Information -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+            <label class="text-muted">Title</label>
+            <p class="fw-bold">{{ contract.title }}</p>
+            </div>
+
+            <div class="col-md-6 mb-3">
+            <label class="text-muted">Contract Type</label>
+            <p class="fw-bold">{{ contract.contractType }}</p>
+            </div>
+
+            <div class="col-md-6 mb-3">
+            <label class="text-muted">Start Date</label>
+            <p class="fw-bold">{{ contract.startDate | date }}</p>
+            </div>
+
+            <div class="col-md-6 mb-3">
+            <label class="text-muted">End Date</label>
+            <p class="fw-bold">{{ contract.endDate | date }}</p>
+            </div>
+
+            <div class="col-md-6 mb-3">
+            <label class="text-muted">Base Salary</label>
+            <p class="fw-bold">{{ contract.baseSalary }} EGP</p>
+            </div>
+
+            <div class="col-md-6 mb-3">
+            <label class="text-muted">Employee ID</label>
+            <p class="fw-bold">{{ contract.employeeId }}</p>
+            </div>
+
+            <div class="col-md-4 mb-3">
+            <label class="text-muted">Working Hours (per day)</label>
+            <p class="fw-bold">{{ contract.workingHoursPerDay }}</p>
+            </div>
+
+            <div class="col-md-4 mb-3">
+            <label class="text-muted">Annual Leave Days</label>
+            <p class="fw-bold">{{ contract.annualLeaveDays }}</p>
+            </div>
+
+            <div class="col-md-4 mb-3">
+            <label class="text-muted">Probation Period</label>
+            <p class="fw-bold">{{ contract.probationPeriodDays }} days</p>
+            </div>
+
+            <div class="col-md-4 mb-3">
+            <label class="text-muted">Notice Period</label>
+            <p class="fw-bold">{{ contract.noticePeriodDays }} days</p>
+            </div>
+
+            <div class="col-md-4 mb-3">
+            <label class="text-muted">Status</label>
+            <p>
+                <span class="badge"
+                [class.bg-success]="contract.isActive"
+                [class.bg-danger]="!contract.isActive">
+                {{ contract.isActive ? 'Active' : 'Inactive' }}
+                </span>
+            </p>
+            </div>
+
+            <div class="col-md-4 mb-3">
+            <label class="text-muted">Contract Status</label>
+            <p class="fw-bold">{{ contract.status }}</p>
+            </div>
+        </div>
+
+        <!-- Contract Points -->
+        <hr class="my-4">
+        <h5 class="mb-3" style="color: var(--primary-color);">Contract Points</h5>
+
+        <div *ngIf="contract.points && contract.points.length > 0">
+            <div *ngFor="let point of contract.points" class="point-box mb-3">
+            <h6 class="fw-bold">{{ point.header }}</h6>
+            <p class="mb-1">{{ point.description }}</p>
+            <small class="text-muted">Created: {{ point.createdAt | date }}</small>
+            </div>
+        </div>
+
+        <div *ngIf="!contract.points || contract.points.length === 0">
+            <p class="text-muted">No contract points available.</p>
+        </div>
+
+        <!-- Audit Information -->
+        <hr class="my-4">
+        <div class="row">
+            <div class="col-md-6">
+            <small class="text-muted">Created: {{ contract.createdAt | date:'medium' }} by {{ contract.createdBy }}</small>
+            </div>
+            <div class="col-md-6 text-end">
+            <small class="text-muted">Updated: {{ contract.updatedAt | date:'medium' }} by {{ contract.updatedBy }}</small>
+            </div>
+        </div>
+
+        </div>
+    </div>
+    </div>

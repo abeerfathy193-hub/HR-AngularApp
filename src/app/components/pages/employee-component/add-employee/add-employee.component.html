@@ -1,0 +1,566 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Add Employee</h2>
+    <p class="text-muted">Add a new employee to the system</p>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+
+        @if (errorMessage) {
+          <div class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+          </div>
+        }
+
+        @if (successMessage) {
+          <div class="alert alert-success" role="alert">
+            {{ successMessage }}
+          </div>
+        }
+
+        <!-- Personal Information Section -->
+        <div class="form-section">
+          <h5 class="section-title border-bottom pb-2 mb-3">Personal Information</h5>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Full Name <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="fullName"
+                [class.is-invalid]="fullName?.invalid && fullName?.touched"
+                placeholder="Enter full name"
+              />
+              @if (fullName?.invalid && fullName?.touched) {
+                <div class="invalid-feedback">
+                  @if (fullName?.errors?.['required']) {
+                    <span>Full name is required</span>
+                  }
+                  @if (fullName?.errors?.['minlength']) {
+                    <span>Full name must be at least 3 characters</span>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Birth Date <span class="text-danger">*</span></label>
+              <input
+                type="date"
+                class="form-control"
+                formControlName="birthDate"
+                [class.is-invalid]="birthDate?.invalid && birthDate?.touched"
+                aria-label="Select birth date"
+              />
+              @if (birthDate?.invalid && birthDate?.touched) {
+                <div class="invalid-feedback">Birth date is required</div>
+              }
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Gender <span class="text-danger">*</span></label>
+              <select
+                class="form-control"
+                formControlName="gender"
+                [class.is-invalid]="gender?.invalid && gender?.touched"
+                aria-label="Select gender"
+              >
+                <option value="">Select gender</option>
+                @for (g of genderTypes; track g) {
+                  <option [value]="g">{{ g }}</option>
+                }
+              </select>
+              @if (gender?.invalid && gender?.touched) {
+                <div class="invalid-feedback">Gender is required</div>
+              }
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Marital Status <span class="text-danger">*</span></label>
+              <select
+                class="form-control"
+                formControlName="maritalStatus"
+                [class.is-invalid]="maritalStatus?.invalid && maritalStatus?.touched"
+                aria-label="Select marital status"
+              >
+                <option value="">Select status</option>
+                @for (ms of maritalStatuses; track ms) {
+                  <option [value]="ms">{{ ms }}</option>
+                }
+              </select>
+              @if (maritalStatus?.invalid && maritalStatus?.touched) {
+                <div class="invalid-feedback">Marital status is required</div>
+              }
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Military Status <span class="text-danger">*</span></label>
+              <select
+                class="form-control"
+                formControlName="militaryStatus"
+                [class.is-invalid]="militaryStatus?.invalid && militaryStatus?.touched"
+                aria-label="Select military status"
+              >
+                <option value="">Select status</option>
+                @for (ms of militaryStatuses; track ms) {
+                  <option [value]="ms">{{ ms }}</option>
+                }
+              </select>
+              @if (militaryStatus?.invalid && militaryStatus?.touched) {
+                <div class="invalid-feedback">Military status is required</div>
+              }
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Address <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="address"
+                [class.is-invalid]="address?.invalid && address?.touched"
+                placeholder="Enter address"
+              />
+              @if (address?.invalid && address?.touched) {
+                <div class="invalid-feedback">Address is required</div>
+              }
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Country <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="country"
+                [class.is-invalid]="country?.invalid && country?.touched"
+                placeholder="Enter country"
+              />
+              @if (country?.invalid && country?.touched) {
+                <div class="invalid-feedback">Country is required</div>
+              }
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Nationality <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="nationality"
+                [class.is-invalid]="nationality?.invalid && nationality?.touched"
+                placeholder="Enter nationality"
+              />
+              @if (nationality?.invalid && nationality?.touched) {
+                <div class="invalid-feedback">Nationality is required</div>
+              }
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Education <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="education"
+                [class.is-invalid]="education?.invalid && education?.touched"
+                placeholder="Enter education level"
+              />
+              @if (education?.invalid && education?.touched) {
+                <div class="invalid-feedback">Education is required</div>
+              }
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+              <input
+                type="tel"
+                class="form-control"
+                formControlName="phoneNumber"
+                [class.is-invalid]="phoneNumber?.invalid && phoneNumber?.touched"
+                placeholder="Enter phone number"
+              />
+              @if (phoneNumber?.invalid && phoneNumber?.touched) {
+                <div class="invalid-feedback">
+                  @if (phoneNumber?.errors?.['required']) {
+                    <span>Phone number is required</span>
+                  }
+                  @if (phoneNumber?.errors?.['pattern']) {
+                    <span>Please enter a valid phone number</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email <span class="text-danger">*</span></label>
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                [class.is-invalid]="email?.invalid && email?.touched"
+                placeholder="Enter email"
+              />
+              @if (email?.invalid && email?.touched) {
+                <div class="invalid-feedback">
+                  @if (email?.errors?.['required']) {
+                    <span>Email is required</span>
+                  }
+                  @if (email?.errors?.['email']) {
+                    <span>Please enter a valid email</span>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">User Name <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="userName"
+                [class.is-invalid]="userName?.invalid && userName?.touched"
+                placeholder="Enter username"
+              />
+              @if (userName?.invalid && userName?.touched) {
+                <div class="invalid-feedback">
+                  @if (userName?.errors?.['required']) {
+                    <span>User name is required</span>
+                  }
+                  @if (userName?.errors?.['minlength']) {
+                    <span>User name must be at least 3 characters</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Employee Identification Section -->
+        <div class="form-section">
+          <h5 class="section-title border-bottom pb-2 mb-3">Employee Identification</h5>
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">National ID</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="nationalId"
+                placeholder="Enter national ID"
+              />
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Passport</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="passPort"
+                placeholder="Enter passport number"
+              />
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label class="form-label">SSN ID</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="ssnId"
+                placeholder="Enter SSN ID"
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Position</label>
+              <select class="form-control" formControlName="positionId" aria-label="Select position">
+                <option [value]="null">Select position</option>
+                @for (position of positions; track position.id) {
+                  <option [value]="position.id">{{ position.title }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Contract</label>
+              <select class="form-control" formControlName="contractId" aria-label="Select contract">
+                <option [value]="null">Select contract</option>
+                @for (contract of contracts; track contract.id) {
+                  <option [value]="contract.id">{{ contract.title }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Person ID</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="personId"
+                placeholder="Enter person ID (if exists)"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Role Section -->
+        <div class="form-section">
+          <h5 class="section-title border-bottom pb-2 mb-3">Role</h5>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Role Name <span class="text-danger">*</span></label>
+              <select
+                class="form-control"
+                formControlName="roleName"
+                [class.is-invalid]="roleName?.invalid && roleName?.touched"
+                aria-label="Select role"
+              >
+                <option value="">Select role</option>
+                @for (role of roleOptions; track role) {
+                  <option [value]="role">{{ role }}</option>
+                }
+              </select>
+              @if (roleName?.invalid && roleName?.touched) {
+                <div class="invalid-feedback">Role name is required</div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Person Files Section -->
+        <div class="form-section">
+          <h5 class="section-title border-bottom pb-2 mb-3">Person Files</h5>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Profile Image</label>
+              <input
+                type="file"
+                class="form-control"
+                (change)="onImgFileSelected($event)"
+                accept="image/*"
+                aria-label="Upload profile image"
+              />
+              @if (imgPreview) {
+                <div class="mt-2">
+                  <img [src]="imgPreview" alt="Preview" class="preview-image" />
+                </div>
+              }
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">CV/Resume File</label>
+              <input
+                type="file"
+                class="form-control"
+                (change)="onCvFileSelected($event)"
+                accept=".pdf,.doc,.docx"
+                aria-label="Upload CV or resume file"
+              />
+              @if (selectedCvFile) {
+                <small class="text-muted">Selected: {{ selectedCvFile.name }}</small>
+              }
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Military File</label>
+              <input
+                type="file"
+                class="form-control"
+                (change)="onMilitaryFileSelected($event)"
+                accept=".pdf,.jpg,.jpeg,.png"
+                aria-label="Upload military file"
+              />
+              @if (selectedMilitaryFile) {
+                <small class="text-muted">Selected: {{ selectedMilitaryFile.name }}</small>
+              }
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Education File</label>
+              <input
+                type="file"
+                class="form-control"
+                (change)="onEducationFileSelected($event)"
+                accept=".pdf,.jpg,.jpeg,.png"
+                aria-label="Upload education file"
+              />
+              @if (selectedEducationFile) {
+                <small class="text-muted">Selected: {{ selectedEducationFile.name }}</small>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Employee Files Section -->
+        <div class="form-section">
+          <h5 class="section-title border-bottom pb-2 mb-3">Employee Files</h5>
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">National ID File</label>
+              <input
+                type="file"
+                class="form-control"
+                (change)="onNationalIdFileSelected($event)"
+                accept=".pdf,.jpg,.jpeg,.png"
+                aria-label="Upload national ID file"
+              />
+              @if (selectedNationalIdFile) {
+                <small class="text-muted">Selected: {{ selectedNationalIdFile.name }}</small>
+              }
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Passport File</label>
+              <input
+                type="file"
+                class="form-control"
+                (change)="onPassportFileSelected($event)"
+                accept=".pdf,.jpg,.jpeg,.png"
+                aria-label="Upload passport file"
+              />
+              @if (selectedPassportFile) {
+                <small class="text-muted">Selected: {{ selectedPassportFile.name }}</small>
+              }
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Birth Certificate File</label>
+              <input
+                type="file"
+                class="form-control"
+                (change)="onBirthCertificateFileSelected($event)"
+                accept=".pdf,.jpg,.jpeg,.png"
+                aria-label="Upload birth certificate file"
+              />
+              @if (selectedBirthCertificateFile) {
+                <small class="text-muted">Selected: {{ selectedBirthCertificateFile.name }}</small>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Credentials Section -->
+        <div class="form-section">
+          <h5 class="section-title border-bottom pb-2 mb-3">Account Credentials</h5>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Password <span class="text-danger">*</span></label>
+              <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+                [class.is-invalid]="password?.invalid && password?.touched"
+                placeholder="Enter password"
+              />
+              @if (password?.invalid && password?.touched) {
+                <div class="invalid-feedback">
+                  @if (password?.errors?.['required']) {
+                    <span>Password is required</span>
+                  }
+                  @if (password?.errors?.['minLength']) {
+                    <span>Password must be at least 8 characters</span>
+                  }
+                  @if (password?.errors?.['uppercase']) {
+                    <span>Password must contain at least one uppercase letter</span>
+                  }
+                  @if (password?.errors?.['lowercase']) {
+                    <span>Password must contain at least one lowercase letter</span>
+                  }
+                  @if (password?.errors?.['number']) {
+                    <span>Password must contain at least one number</span>
+                  }
+                  @if (password?.errors?.['specialChar']) {
+                    <span>Password must contain at least one special character</span>
+                  }
+                </div>
+              }
+              @if (password?.value && password?.touched) {
+                <div class="password-requirements mt-2">
+                  <small class="text-muted d-block mb-1">Password must contain:</small>
+                  <ul class="password-checklist">
+                    <li [class.valid]="hasMinLength()" [class.invalid]="!hasMinLength()">
+                      <span class="check-icon">{{ hasMinLength() ? '✓' : '✗' }}</span>
+                      At least 8 characters
+                    </li>
+                    <li [class.valid]="hasUppercase()" [class.invalid]="!hasUppercase()">
+                      <span class="check-icon">{{ hasUppercase() ? '✓' : '✗' }}</span>
+                      One uppercase letter
+                    </li>
+                    <li [class.valid]="hasLowercase()" [class.invalid]="!hasLowercase()">
+                      <span class="check-icon">{{ hasLowercase() ? '✓' : '✗' }}</span>
+                      One lowercase letter
+                    </li>
+                    <li [class.valid]="hasNumber()" [class.invalid]="!hasNumber()">
+                      <span class="check-icon">{{ hasNumber() ? '✓' : '✗' }}</span>
+                      One number
+                    </li>
+                    <li [class.valid]="hasSpecialChar()" [class.invalid]="!hasSpecialChar()">
+                      <span class="check-icon">{{ hasSpecialChar() ? '✓' : '✗' }}</span>
+                      One special character
+                    </li>
+                  </ul>
+                </div>
+              }
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+              <input
+                type="password"
+                class="form-control"
+                formControlName="confirmPassword"
+                [class.is-invalid]="confirmPassword?.invalid && confirmPassword?.touched"
+                placeholder="Confirm password"
+              />
+              @if (confirmPassword?.invalid && confirmPassword?.touched) {
+                <div class="invalid-feedback">
+                  @if (confirmPassword?.errors?.['required']) {
+                    <span>Please confirm your password</span>
+                  }
+                  @if (confirmPassword?.errors?.['passwordMismatch']) {
+                    <span>Passwords do not match</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-secondary" (click)="router.navigate(['/employees-data/employees'])">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-add-employee-submit"
+            [disabled]="isLoading || employeeForm.invalid"
+          >
+            @if (isLoading) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Adding...
+            } @else {
+              Add Employee
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

@@ -1,15 +1,87 @@
-<div class="page-container">
-  <div class="page-header">
-    <h2>Contracts</h2>
-    <p class="text-muted">Manage employee contracts and agreements</p>
-  </div>
+  <div class="page-container">
 
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Contract Management</h5>
-      <p class="card-text">Contract management interface will be implemented here.</p>
+    <div class="card">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="card-title">Contract Management</h5>
+          <button
+            class="btn"
+            style="background: var(--primary-color); color: white;"
+            (click)="addContract()"
+          >
+            + Add Contract
+          </button>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-3">
+          <li class="nav-item">
+            <a 
+              class="nav-link" 
+              [class.active]="activeTab === 'all'"
+              (click)="switchTab('all')"
+              style="cursor: pointer;">
+              All Contracts
+            </a>
+          </li>
+          <li class="nav-item">
+            <a 
+              class="nav-link" 
+              [class.active]="activeTab === 'active'"
+              (click)="switchTab('active')"
+              style="cursor: pointer;">
+              Active Contracts
+            </a>
+          </li>
+        </ul>
+
+        <!-- Table -->
+        <table class="table table-hover">
+          <thead style="background: var(--light-color); color: var(--primary-color);">
+            <tr>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Status</th>
+              <th>Salary</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let c of contracts">
+              <td>{{ c.title }}</td>
+              <td>{{ c.contractType }}</td>
+              <td>{{ c.startDate | date }}</td>
+              <td>{{ c.endDate | date }}</td>
+
+              <td>
+                <span class="badge"
+                  [class.bg-success]="c.isActive"
+                  [class.bg-danger]="!c.isActive">
+                  {{ c.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+
+              <td>{{ c.baseSalary }} EGP</td>
+
+              <td>
+                <button class="btn btn-sm btn-info me-1" (click)="view(c.id)">View</button>
+                <button class="btn btn-sm btn-warning me-1" (click)="edit(c.id)">Edit</button>
+                <button class="btn btn-sm btn-danger" (click)="delete(c.id)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
+        <!-- Empty State -->
+        <div *ngIf="contracts.length === 0" class="text-center py-5 text-muted">
+          <p>No contracts found</p>
+        </div>
+
+      </div>
     </div>
   </div>
-</div>
-
-

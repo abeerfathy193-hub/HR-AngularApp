@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import * as faceapi from 'face-api.js';
-
+import { FaceData } from '../../../interfaces/attendance.interface';
 @Component({
   selector: 'app-camera-model',
   imports: [],
@@ -10,11 +10,16 @@ import * as faceapi from 'face-api.js';
 export class CameraModel implements OnInit {
 
   @ViewChild('video', { static: true }) video!: ElementRef<HTMLVideoElement>; //Refer to video template - static: true to access in ngOnInit, by default it's false and must be accessed in ngAfterViewInit
-  @Output() faceDetected = new EventEmitter<string | null>(); //Emit captured image as data URL or null if no face detected
+  @Output() faceDetected = new EventEmitter<FaceData | null>(); //Emit captured image as data URL or null if no face detected
   stream: MediaStream | null = null; //To store the camera streaming
+  currentLocation: { latitude: number; longitude: number } | null = null;
 
   async ngOnInit() {
     try {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.currentLocation = { latitude: position.coords.latitude, longitude: position.coords.longitude };
+        });
       await this.loadModels();
       await this.startCameraAndDetect();
     } catch (err) {
@@ -56,7 +61,7 @@ export class CameraModel implements OnInit {
         console.log("FACE DETECTED", detection);
         const capturedImage = this.captureImage();
         this.stopCamera();
-        this.faceDetected.emit(capturedImage);
+        this.faceDetected.emit({ image: capturedImage, coords: this.currentLocation!});
       }
     };
     detect();
@@ -66,7 +71,7 @@ export class CameraModel implements OnInit {
     const canvas = document.createElement('canvas');
     const video = this.video.nativeElement;
 
-    canvas.width = Math.min(video.videoWidth, 1024); 
+    canvas.width = Math.min(video.videoWidth, 1024);
     canvas.height = (canvas.width / video.videoWidth) * video.videoHeight;
 
     const ctx = canvas.getContext('2d')!;

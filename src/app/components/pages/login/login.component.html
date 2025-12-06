@@ -6,7 +6,7 @@
       <p class="subtitle">Sign in to your HR System account</p>
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <form [formGroup]="loginForm" (submit)="onSubmit()" class="login-form">
       @if (errorMessage) {
         <div class="alert alert-danger" role="alert">
           {{ errorMessage }}
@@ -80,6 +80,10 @@
           Sign In
         }
       </button>
+
+      <div class="register-link">
+        <p>Don't have an account? <a routerLink="/register">Sign up</a></p>
+      </div>
     </form>
 
     <div class="divider">

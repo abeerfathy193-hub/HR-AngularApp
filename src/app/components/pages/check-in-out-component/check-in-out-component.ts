@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { CameraModel } from "../camera-model/camera-model";
-import { CaptureService } from '../../../services/capture.service';
+import { AttendanceService } from '../../../services/attendance.service';
 import { CommonModule } from '@angular/common';
+import { AttendanceTaken, FaceData } from '../../../interfaces/attendance.interface';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-check-in-out-component',
@@ -10,57 +12,60 @@ import { CommonModule } from '@angular/common';
   styleUrl: './check-in-out-component.css',
 })
 export class CheckInOutComponent implements OnInit, OnDestroy {
-  CheckAttendance = false;
+  IsAttended = false;
   showCameraModal = false;
   currentTime = new Date();
   private clockIntervalId: ReturnType<typeof setInterval> | null = null;
-    constructor(private CaptureService: CaptureService) { }
+  constructor(private attendanceService: AttendanceService, private authService :AuthService) { }
 
   ngOnInit(): void {
-    this.clockIntervalId = setInterval(() => {this.currentTime = new Date()}, 1000);
+    this.clockIntervalId = setInterval(() => { this.currentTime = new Date() }, 1000);
   }
 
   ngOnDestroy(): void {
-    if (this.clockIntervalId) 
+    if (this.clockIntervalId)
       clearInterval(this.clockIntervalId);
-    
+
   }
 
   openCameraModal() {
     this.showCameraModal = true;
   }
 
-  closeCameraModal(event: string | null) {
-    if (event) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-          this.takeAttendance(event, latitude, longitude);
-        },
-        (error) => {
-          console.error("Cannot get location", error);
+
+  onDetect(input: FaceData | null) {
+    if (input) {
+      this.onAttend(input);
+      this.showCameraModal = false;
+    }
+  }
+
+  onAttend(input: FaceData) {
+
+    const attendance = {
+      checkTime: new Date(),
+      ImageBase64: input.image,
+      longitude: input.coords.longitude,
+      latitude: input.coords.latitude
+    } as AttendanceTaken;
+    if (this.IsAttended) {
+      this.attendanceService.setCheckOut(attendance)
+        .subscribe({
+          next: (res) => { this.onCheckInOut(); console.log("Attendance sent successfully", res) },
+          error: (err) => console.error("Error sending attendance", err)
         });
     }
-    this.showCameraModal = false;
-  }
-  takeAttendance(format: string, lat: number, lon: number) {
-    const payload = {
-      EmployeeId: 0,
-      ImageBase64: format,
-      latitude: lat,
-      longitude: lon,
-      CheckTime: new Date().toISOString()
-    };
-    console.log("Attendance Payload:", payload);
-    this.CaptureService.takeAttendance(payload)
-      .subscribe({
-        next: (res) => {this.onCheckInOut(); console.log("Attendance sent successfully", res)},
-        error: (err) => console.error("Error sending attendance", err)
-      });
+    else {
+      this.attendanceService.setCheckIn(attendance)
+        .subscribe({
+          next: (res) => { this.onCheckInOut(); console.log("Attendance sent successfully", res) },
+          error: (err) => console.error("Error sending attendance", err)
+        });
+    }
+
   }
   onCheckInOut(): void {
-    this.CheckAttendance = !this.CheckAttendance;
+    this.IsAttended = !this.IsAttended;
   }
 
 }

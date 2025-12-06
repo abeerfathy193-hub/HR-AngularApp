@@ -14,4 +14,6 @@ export interface ICompany {
     companyFooter?: string,
     taxRegistrationNumber: string;
     commercialNumber: string
+    workStartTime: number;
+    workEndTime: number;
 }

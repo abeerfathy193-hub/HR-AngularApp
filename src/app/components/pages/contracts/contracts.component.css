@@ -1,0 +1,58 @@
+.table-hover tbody tr:hover {
+  background-color: #f7f1e3;
+  cursor: pointer;
+}
+
+.btn-info {
+  background-color: #8bae66;
+  color: white;
+  border: none;
+}
+
+.btn-warning {
+  background-color: #e67e22;
+  border: none;
+  color: white;
+}
+
+.btn-danger {
+  background-color: #b33939;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #d63031;
+}
+
+.btn-info:hover {
+  opacity: 0.9;
+}
+
+.btn-warning:hover {
+  opacity: 0.9;
+}
+
+/* Tab Styling */
+.nav-tabs {
+  border-bottom: 2px solid #dee2e6;
+}
+
+.nav-tabs .nav-link {
+  color: #6c757d;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  border-bottom: 3px solid var(--accent-color);
+  color: var(--accent-color);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--primary-color);
+  background-color: transparent;
+  border-bottom: 3px solid var(--primary-color);
+  font-weight: 600;
+}

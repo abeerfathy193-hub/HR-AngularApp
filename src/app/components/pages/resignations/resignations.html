@@ -1,0 +1,34 @@
+<div class="container">
+    <h2 class="title">Submit Resignation Request</h2>
+
+    <form [formGroup]="resignationForm" (ngSubmit)="submitForm()" class="form-box">
+
+        <div class="form-group">
+            <label>Reason</label>
+            <textarea rows="3" formControlName="reason"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Proposed Last Working Day</label>
+            <input type="date" formControlName="proposedLastWorkingDay" />
+        </div>
+
+        <div class="form-group">
+            <label>Attachment (Optional)</label>
+            <input type="file" (change)="onFileChange($event)" />
+        </div>
+
+        <div class="form-group">
+            <label>First Approver ID</label>
+            <input type="number" formControlName="firstApproveId" />
+        </div>
+
+        <div class="form-group">
+            <label>Second Approver ID (optional)</label>
+            <input type="number" formControlName="secondApproveId" />
+        </div>
+
+        <button class="btn-submit" type="submit">Submit</button>
+
+    </form>
+</div>

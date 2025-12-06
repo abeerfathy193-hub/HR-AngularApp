@@ -1,0 +1,39 @@
+<div class="container">
+    <h2 class="title">Request HR Letter</h2>
+
+    <form [formGroup]="hrLetterForm" (ngSubmit)="submitForm()" class="form-box">
+
+        <div class="form-group">
+            <label>Sent To</label>
+            <input type="text" formControlName="letterType" />
+        </div>
+
+        <div class="form-group">
+            <label>Reason</label>
+            <textarea rows="2" formControlName="reason"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Extra Details (optional)</label>
+            <textarea rows="2" formControlName="extraDetails"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Attachment (Optional)</label>
+            <input type="file" (change)="onFileChange($event)" />
+        </div>
+
+        <div class="form-group">
+            <label>First Approver ID</label>
+            <input type="number" formControlName="firstApproveId" />
+        </div>
+
+        <div class="form-group">
+            <label>Second Approver ID (optional)</label>
+            <input type="number" formControlName="secondApproveId" />
+        </div>
+
+        <button class="btn-submit" type="submit">Submit</button>
+
+    </form>
+</div>

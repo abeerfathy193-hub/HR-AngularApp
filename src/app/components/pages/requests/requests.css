@@ -1,0 +1,92 @@
+table {
+  width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse; /* Clean borders */
+}
+
+th,
+td {
+  border: 1px solid grey;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: orange;
+  color: white;
+}
+
+.button-class {
+  background-color: orange;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.button-class:hover {
+  background-color: darkorange;
+}
+.badge-pending {
+  background-color: yellow;
+  color: black;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge-approved {
+  background-color: green;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge-rejected {
+  background-color: red;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+tbody tr:hover {
+  background-color: #f5f5f5 !important;
+}
+
+.request-action-btn {
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 4px;
+  transition: background-color 0.2s ease;
+}
+
+/* Edit button - orange */
+.request-action-btn.edit {
+  background-color: orange;
+  color: white;
+}
+
+.request-action-btn.edit:hover {
+  background-color: darkorange;
+}
+
+/* Cancel button - red */
+.request-action-btn.cancel {
+  background-color: red;
+  color: white;
+}
+
+.request-action-btn.cancel:hover {
+  background-color: darkred;
+}

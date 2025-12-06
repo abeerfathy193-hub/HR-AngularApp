@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { LayoutComponent } from './components/layout/layout.component';
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { CompanyDataComponent } from './components/pages/company-data/company-data.component';
-import { CompanyInfoComponent } from './components/pages/company-info/company-info.component';
 import { DepartmentsComponent } from './components/pages/departments/departments.component';
 import { PositionsComponent } from './components/pages/positions/positions.component';
 import { LeavesHolidaysComponent } from './components/pages/leaves-holidays/leaves-holidays.component';
@@ -12,17 +11,37 @@ import { ContractsComponent } from './components/pages/contracts/contracts.compo
 import { AttendanceComponent } from './components/pages/attendance/attendance.component';
 import { VacanciesComponent } from './components/pages/vacancies/vacancies.component';
 import { LoginComponent } from './components/pages/login/login.component';
+import { RegisterComponent } from './components/pages/register/register.component';
 import { authGuard } from './guards/auth.guard';
+<<<<<<< HEAD
 import { OpenVacancies } from './components/pages/open-vacancies/open-vacancies';
 import { ApplyForm } from './components/pages/apply-form/apply-form';
 import { MyApplications } from './components/pages/my-applications/my-applications';
 import { ApplicationDetails } from './components/pages/application-details/application-details';
 import { Interview } from './components/pages/interview/interview';
+=======
+import { Leaves } from './components/pages/leaves/leaves';
+import { Requests } from './components/pages/requests/requests';
+import { Resignations } from './components/pages/resignations/resignations';
+import { Hrletters } from './components/pages/hrletters/hrletters';
+import { ViewRequest } from './components/pages/view-request/view-request';
+import { CreateContractComponent } from './components/pages/contracts/create.contract/create-contract';
+import { ViewContractComponent } from './components/pages/contracts/contract.view/contract.view';
+import { EditContractComponent } from './components/pages/contracts/contract.edit/contract.edit';
+import { EmployeeComponent } from './components/pages/employee-component/employee-component';
+import { AddEmployeeComponent } from './components/pages/employee-component/add-employee/add-employee.component';
+import { LeaveTypeComponent } from './components/pages/leavetypscomponant/leavetypscomponant';
+import { CompanyInfoComponent } from './components/pages/company-info/company-info.component';
+>>>>>>> upstream/main
 
 export const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
   },
   { path: 'openvacancies', component: OpenVacancies },
   { path: 'apply/:id', component: ApplyForm },
@@ -36,17 +55,32 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'company-data', component: CompanyDataComponent, children: [
-        {path: 'company-info', component: CompanyInfoComponent},
-        {path: 'departments', component: DepartmentsComponent},
-        {path: 'positions', component: PositionsComponent}
-      ]},
+      {
+        path: 'company-data',
+        component: CompanyDataComponent,
+        children: [
+          { path: 'company-info', component: CompanyInfoComponent },
+          { path: 'departments', component: DepartmentsComponent },
+          { path: 'positions', component: PositionsComponent },
+        ],
+      },
       { path: 'contracts', component: ContractsComponent },
+      { path: 'contracts/create', component: CreateContractComponent },
+      { path: 'contracts/view/:id', component: ViewContractComponent },
+      { path: 'contracts/edit/:id', component: EditContractComponent },
       { path: 'leaves-holidays', component: LeavesHolidaysComponent },
-      { path: 'employees-data', component: EmployeesDataComponent },
+      {
+        path: 'employees-data',
+        component: EmployeesDataComponent,
+        children: [
+          { path: 'employees', component: EmployeeComponent },
+          { path: 'employees/create', component: AddEmployeeComponent },
+        ],
+      },
       { path: 'payroll', component: PayrollComponent },
       { path: 'attendance', component: AttendanceComponent },
       { path: 'vacancies', component: VacanciesComponent },
+<<<<<<< HEAD
       { path: 'application-details/:id', component: ApplicationDetails },
       { path: 'schedule-interview/:applicationId', component: Interview }
 
@@ -56,4 +90,14 @@ export const routes: Routes = [
     
   }
   
+=======
+      { path: 'Leavetyps', component: LeaveTypeComponent },
+    ],
+  },
+  { path: 'requests', component: Requests },
+  { path: 'requests/leaves', component: Leaves },
+  { path: 'requests/resignations', component: Resignations },
+  { path: 'requests/hrletters', component: Hrletters },
+  { path: 'requests/view/:id/:type', component: ViewRequest },
+>>>>>>> upstream/main
 ];

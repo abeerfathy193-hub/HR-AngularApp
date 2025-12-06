@@ -1,0 +1,56 @@
+<div class="leave-form-wrapper">
+
+    <h2>Create Leave Request</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="leave-form">
+
+        <div class="form-row">
+            <label>Start Date</label>
+            <input type="date" formControlName="startDate" />
+        </div>
+
+        <div class="form-row">
+            <label>Number of Days</label>
+            <input type="number" formControlName="numberOfDays" />
+        </div>
+
+        <div class="form-row">
+            <label>Leave Type</label>
+            <select formControlName="leaveType">
+                <option *ngFor="let t of leaveTypes" [value]="t.id">
+                    {{ t.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label>Reason</label>
+            <textarea formControlName="reason" rows="4"></textarea>
+        </div>
+
+        <div class="form-row">
+            <label>Attachment (Optional)</label>
+            <input type="file" (change)="onFileChange($event)" />
+        </div>
+
+        <div class="form-row checkbox-row">
+            <label>Is Paid</label>
+            <input type="checkbox" formControlName="isPaid" />
+        </div>
+
+        <div class="form-row">
+            <label>First Approver ID</label>
+            <input type="number" formControlName="firstApproveId" />
+        </div>
+
+        <div class="form-row">
+            <label>Second Approver ID (Optional)</label>
+            <input type="number" formControlName="secondApproveId" />
+        </div>
+
+        <button class="submit-btn" type="submit" [disabled]="form.invalid">
+            Submit Request
+        </button>
+
+    </form>
+</div>
