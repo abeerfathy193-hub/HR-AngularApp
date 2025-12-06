@@ -4,25 +4,25 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { LeaveType, LeaveTypeCreateDto, LeaveTypeUpdateDto } from '../../../interfaces/leavetypes.interface';
-import { LeaveTypeService } from '../../../services/leaveType.service';
+import {
+  LeaveType,
+  LeaveTypeCreateDto,
+  LeaveTypeUpdateDto,
+} from '../../../interfaces/leavetypes.interface';
+import { LeaveTypeService } from '../../../services/leavetype.service';
 
 @Component({
   selector: 'app-leave-type',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './leavetypscomponant.html',
-  styleUrls: ['./leavetypscomponant.css']
+  styleUrls: ['./leavetypscomponant.css'],
 })
 export class LeaveTypeComponent implements OnInit {
   leaveTypes: LeaveType[] = [];
   filteredLeaveTypes: LeaveType[] = [];
   leaveTypeForm: FormGroup;
-  
+
   isLoading = false;
   showModal = false;
   isEditMode = false;
@@ -30,10 +30,7 @@ export class LeaveTypeComponent implements OnInit {
   searchTerm = '';
   filterActive: string = 'all'; // 'all', 'active', 'inactive'
 
-  constructor(
-    private leaveTypeService: LeaveTypeService,
-    private fb: FormBuilder
-  ) {
+  constructor(private leaveTypeService: LeaveTypeService, private fb: FormBuilder) {
     this.leaveTypeForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
@@ -41,7 +38,7 @@ export class LeaveTypeComponent implements OnInit {
       isPaid: [true],
       requiresApproval: [true],
       requiresAttachment: [false],
-      isActive: [true]
+      isActive: [true],
     });
   }
 
@@ -60,7 +57,7 @@ export class LeaveTypeComponent implements OnInit {
       error: (error) => {
         console.error('Error loading leave types:', error);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -69,17 +66,16 @@ export class LeaveTypeComponent implements OnInit {
 
     // Apply active filter
     if (this.filterActive === 'active') {
-      filtered = filtered.filter(lt => lt.isActive === true);
+      filtered = filtered.filter((lt) => lt.isActive === true);
     } else if (this.filterActive === 'inactive') {
-      filtered = filtered.filter(lt => lt.isActive === false);
+      filtered = filtered.filter((lt) => lt.isActive === false);
     }
 
     // Apply search filter
     if (this.searchTerm.trim()) {
       const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(lt =>
-        lt.name.toLowerCase().includes(term) ||
-        lt.description?.toLowerCase().includes(term)
+      filtered = filtered.filter(
+        (lt) => lt.name.toLowerCase().includes(term) || lt.description?.toLowerCase().includes(term)
       );
     }
 
@@ -101,7 +97,7 @@ export class LeaveTypeComponent implements OnInit {
       isPaid: true,
       requiresApproval: true,
       requiresAttachment: false,
-      isActive: true
+      isActive: true,
     });
     this.showModal = true;
   }
@@ -116,7 +112,7 @@ export class LeaveTypeComponent implements OnInit {
       isPaid: leaveType.isPaid,
       requiresApproval: leaveType.requiresApproval,
       requiresAttachment: leaveType.requiresAttachment,
-      isActive: leaveType.isActive
+      isActive: leaveType.isActive,
     });
     this.showModal = true;
   }
@@ -141,7 +137,7 @@ export class LeaveTypeComponent implements OnInit {
         isPaid: formValue.isPaid,
         requiresApproval: formValue.requiresApproval,
         requiresAttachment: formValue.requiresAttachment,
-        isActive: formValue.isActive
+        isActive: formValue.isActive,
       };
 
       this.leaveTypeService.update(updateDto).subscribe({
@@ -154,7 +150,7 @@ export class LeaveTypeComponent implements OnInit {
           console.error('Error updating leave type:', error);
           alert('Error updating leave type. Please try again.');
           this.isLoading = false;
-        }
+        },
       });
     } else {
       const createDto: LeaveTypeCreateDto = {
@@ -164,7 +160,7 @@ export class LeaveTypeComponent implements OnInit {
         isPaid: formValue.isPaid,
         requiresApproval: formValue.requiresApproval,
         requiresAttachment: formValue.requiresAttachment,
-        isActive: formValue.isActive
+        isActive: formValue.isActive,
       };
 
       this.leaveTypeService.create(createDto).subscribe({
@@ -177,7 +173,7 @@ export class LeaveTypeComponent implements OnInit {
           console.error('Error creating leave type:', error);
           alert('Error creating leave type. Please try again.');
           this.isLoading = false;
-        }
+        },
       });
     }
   }
@@ -195,27 +191,27 @@ export class LeaveTypeComponent implements OnInit {
         console.error('Error deleting leave type:', error);
         alert('Error deleting leave type. Please try again.');
         this.isLoading = false;
-      }
+      },
     });
   }
 
   formatDate(dateString?: string): string {
     if (!dateString) return '-';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 
   getActiveCount(): number {
-    return this.leaveTypes.filter(lt => lt.isActive === true).length;
+    return this.leaveTypes.filter((lt) => lt.isActive === true).length;
   }
 
   getInactiveCount(): number {
-    return this.leaveTypes.filter(lt => lt.isActive === false).length;
+    return this.leaveTypes.filter((lt) => lt.isActive === false).length;
   }
 }
