@@ -31,11 +31,11 @@
           • ID: {{ application.id }}
         </div>
       </div>
-      <div class="header-actions">
+      <!-- <div class="header-actions">
         <button class="btn btn-outline" (click)="onAddInterview()">
           <i class="fas fa-calendar-plus"></i> Add Interview
         </button>
-      </div>
+      </div> -->
     </div>
 
     <div class="card">
@@ -50,13 +50,15 @@
                 <div class="readonly-field">{{ application.applicantId || 'Not specified' }}</div>
               </div>
               <div class="form-group">
-                <label>User Name</label>
-                <div class="readonly-field">{{ application.userName || 'Not available' }}</div>
+                <label>Full Name</label>
+                <div class="readonly-field">{{ application.fullName || 'Not available' }}</div>
               </div>
               <div class="form-group">
                 <label>Gender</label>
                 <!-- <div class="readonly-field"  [ngClass]="getGenderText(application.gender)">{{ getGenderText( application.gender) }}</div> -->
-                <div>{{ application.gender }}</div>
+                <span [ngClass]="getGenderText(application.gender)">
+                  {{ getGenderText(application.gender) }}
+                </span>
 
               </div>
             </div>

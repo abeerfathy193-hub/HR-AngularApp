@@ -47,7 +47,7 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
@@ -65,6 +65,13 @@ export const routes: Routes = [
       { path: 'contracts/view/:id', component: ViewContractComponent },
       { path: 'contracts/edit/:id', component: EditContractComponent },
       { path: 'leaves-holidays', component: LeavesHolidaysComponent },
+            { path: 'Leavetyps', component: LeaveTypeComponent },
+
+        { path: 'requests', component: Requests },
+  { path: 'requests/leaves', component: Leaves },
+  { path: 'requests/resignations', component: Resignations },
+  { path: 'requests/hrletters', component: Hrletters },
+  { path: 'requests/view/:id/:type', component: ViewRequest },
       {
         path: 'employees-data',
         component: EmployeesDataComponent,

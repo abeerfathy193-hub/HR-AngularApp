@@ -40,10 +40,11 @@ export interface ApplicationDto {
   employeeId?: number;
   appliedAt: Date;
   userName: string;
-  gender: string;
+  gender: number;
   maritalStatus?: string;
   militaryStatus?: string;
   updatedAt: Date;
+  fullName: string;
 }
 
 

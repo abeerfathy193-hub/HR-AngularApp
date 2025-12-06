@@ -71,11 +71,11 @@ export class CompanyInfoComponent implements OnInit {
   checkTime(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
-      const endVal = control.value;
-      const startVal = this.CompanyForm.value.WorkStartTime;
-      if (startVal) {
-        if(startVal >= endVal) 
-          return { invalidTimeRange: true };
+      const startVal = Number(this.CompanyForm.get('WorkStartTime')?.value);
+      const endVal = Number(control.value);
+
+      if (!isNaN(startVal) && !isNaN(endVal) && startVal >= endVal) {
+        return { invalidTimeRange: true };
       }
       return null;
     };

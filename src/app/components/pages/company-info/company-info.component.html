@@ -52,7 +52,7 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <label class="form-label">Work Start Time <span class="text-danger">*</span></label>
-                <input type="number" class="form-control" formControlName="WorkStartTime"
+                <input type="time" class="form-control" formControlName="WorkStartTime"
                   [class.is-invalid]="CompanyForm.controls['WorkStartTime'].invalid && CompanyForm.controls['WorkStartTime'].touched"
                   placeholder="9:00">
                 @if(CompanyForm.controls['WorkStartTime'].invalid &&
@@ -62,7 +62,7 @@
               </div>
               <div class="col-md-6">
                 <label class="form-label">Work End Time <span class="text-danger">*</span></label>
-                <input type="number" class="form-control" formControlName="WorkEndTime"
+                <input type="time" class="form-control" formControlName="WorkEndTime"
                   [class.is-invalid]="CompanyForm.controls['WorkEndTime'].invalid && CompanyForm.controls['WorkEndTime'].touched"
                   placeholder="17:00">
                 @if(CompanyForm.controls['WorkEndTime'].invalid &&

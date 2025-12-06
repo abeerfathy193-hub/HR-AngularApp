@@ -1,12 +1,8 @@
 <div class="page-container">
-  <div class="page-header">
-    <h2>Add Employee</h2>
-    <p class="text-muted">Add a new employee to the system</p>
-  </div>
 
   <div class="card">
     <div class="card-body">
-      <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="employeeForm" (submit)="onSubmit()">
 
         @if (errorMessage) {
           <div class="alert alert-danger" role="alert">
@@ -251,11 +247,20 @@
             <div class="col-md-4 mb-3">
               <label class="form-label">National ID</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
                 formControlName="nationalId"
-                placeholder="Enter national ID"
+                [class.is-invalid]="nationalId?.invalid && nationalId?.touched"
+                placeholder="Enter 14-digit national ID"
+                maxlength="14"
               />
+              @if (nationalId?.invalid && nationalId?.touched) {
+                <div class="invalid-feedback">
+                  @if (nationalId?.errors?.['pattern']) {
+                    <span>National ID must be exactly 14 digits</span>
+                  }
+                </div>
+              }
             </div>
 
             <div class="col-md-4 mb-3">
@@ -280,17 +285,42 @@
           </div>
 
           <div class="row">
-            <div class="col-md-4 mb-3">
-              <label class="form-label">Position</label>
-              <select class="form-control" formControlName="positionId" aria-label="Select position">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Department <span class="text-danger">*</span></label>
+              <select 
+                class="form-control" 
+                formControlName="departmentId" 
+                [class.is-invalid]="departmentId?.invalid && departmentId?.touched"
+                (change)="onDepartmentChange()"
+                aria-label="Select department"
+              >
+                <option [value]="null">Select department</option>
+                @for (dept of departments; track dept.id) {
+                  <option [value]="dept.id">{{ dept.name }}</option>
+                }
+              </select>
+              @if (departmentId?.invalid && departmentId?.touched) {
+                <div class="invalid-feedback">Department is required</div>
+              }
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Position <span class="text-danger">*</span></label>
+              <select 
+                class="form-control" 
+                formControlName="positionId" 
+                [class.is-invalid]="positionId?.invalid && positionId?.touched"
+                aria-label="Select position"
+              >
                 <option [value]="null">Select position</option>
-                @for (position of positions; track position.id) {
+                @for (position of filteredPositions; track position.id) {
                   <option [value]="position.id">{{ position.title }}</option>
                 }
               </select>
+              @if (positionId?.invalid && positionId?.touched) {
+                <div class="invalid-feedback">Position is required</div>
+              }
             </div>
-
-          
           </div>
         </div>
 
@@ -319,19 +349,18 @@
           </div>
         </div>
 
-        <!-- Person Files Section -->
         <div class="form-section">
           <h5 class="section-title border-bottom pb-2 mb-3">Person Files</h5>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">Profile Image</label>
+              <label class="form-label">Profile Image <span class="text-danger">*</span></label>
               <input
                 type="file"
                 class="form-control"
                 (change)="onImgFileSelected($event)"
                 accept="image/*"
-                aria-label="Upload profile image"
+                aria-label="Upload profile image" required
               />
               @if (imgPreview) {
                 <div class="mt-2">
@@ -386,7 +415,6 @@
           </div>
         </div>
 
-        <!-- Employee Files Section -->
         <div class="form-section">
           <h5 class="section-title border-bottom pb-2 mb-3">Employee Files</h5>
 

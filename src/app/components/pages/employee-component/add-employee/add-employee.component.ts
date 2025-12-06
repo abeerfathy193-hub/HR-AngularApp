@@ -4,10 +4,10 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { EmployeeService } from '../../../../services/employee.service';
 import { PositionService } from '../../../../services/position.service';
-import { ContractService } from '../../../../services/contract.service';
+import { DepartmentService } from '../../../../services/department.service';
 import { GenderType, MaritalStatus, MilitaryStatus } from '../../../../interfaces/register.interface';
 import { IPosition } from '../../../../interfaces/position.interface';
-import { ContractDto } from '../../../../interfaces/Contrac.interface';
+import { IDepartment } from '../../../../interfaces/department.interface';
 
 @Component({
   selector: 'app-add-employee',
@@ -24,7 +24,8 @@ export class AddEmployeeComponent implements OnInit {
 
   // Dropdown data
   positions: IPosition[] = [];
-  contracts: ContractDto[] = [];
+  filteredPositions: IPosition[] = [];
+  departments: IDepartment[] = [];
 
   // File properties - Person Files
   selectedImgFile: File | null = null;
@@ -52,7 +53,7 @@ export class AddEmployeeComponent implements OnInit {
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private positionService: PositionService,
-    private contractService: ContractService,
+    private departmentService: DepartmentService,
     public router: Router
   ) {
     this.employeeForm = this.fb.group({
@@ -71,11 +72,10 @@ export class AddEmployeeComponent implements OnInit {
       userName: ['', [Validators.required, Validators.minLength(3)]],
 
       // Employee Identification
-      nationalId: [''],
+      nationalId: ['', [Validators.pattern('^[0-9]{14}$')]],
       passPort: [''],
       ssnId: [''],
-      personId: [null],
-      contractId: [null],
+      departmentId: [null],
       positionId: [null],
 
       // Role
@@ -88,8 +88,19 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadDepartments();
     this.loadPositions();
-    this.loadContracts();
+  }
+
+  loadDepartments(): void {
+    this.departmentService.getAllActive().subscribe({
+      next: (data) => {
+        this.departments = data;
+      },
+      error: (error) => {
+        console.error('Error loading departments:', error);
+      }
+    });
   }
 
   loadPositions(): void {
@@ -103,15 +114,13 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 
-  loadContracts(): void {
-    this.contractService.getAllContracts().subscribe({
-      next: (data) => {
-        this.contracts = data;
-      },
-      error: (error) => {
-        console.error('Error loading contracts:', error);
-      }
-    });
+  onDepartmentChange(): void {
+    const selectedDeptId = this.employeeForm.get('departmentId')?.value;
+    if (selectedDeptId) {
+      this.filteredPositions = this.positions.filter(pos => pos.departmentId === selectedDeptId);
+    }
+      this.filteredPositions = [];
+    
   }
 
   passwordStrengthValidator(control: any) {
@@ -252,12 +261,9 @@ debugger;
       if (this.employeeForm.value.ssnId) {
         formData.append('CreateEmployeeDto.SSNId', this.employeeForm.value.ssnId? this.employeeForm.value.ssnId.toString().trim() : '');
       }
-      // if (this.employeeForm.value.personId) {
-      //   formData.append('CreateEmployeeDto.PersonId', this.employeeForm.value.personId.toString());
-      // }
-      // if (this.employeeForm.value.contractId) {
-      //   formData.append('CreateEmployeeDto.ContractId', this.employeeForm.value.contractId.toString());
-      // }
+      if (this.employeeForm.value.departmentId) {
+        formData.append('CreateEmployeeDto.DepartmentId', this.employeeForm.value.departmentId? this.employeeForm.value.departmentId.toString().trim() : '');
+      }
       if (this.employeeForm.value.positionId) {
         formData.append('CreateEmployeeDto.PositionID', this.employeeForm.value.positionId? this.employeeForm.value.positionId.toString().trim() : '');
       }
@@ -329,6 +335,9 @@ debugger;
   get roleName() { return this.employeeForm.get('roleName'); }
   get password() { return this.employeeForm.get('password'); }
   get confirmPassword() { return this.employeeForm.get('confirmPassword'); }
+  get nationalId() { return this.employeeForm.get('nationalId'); }
+  get departmentId() { return this.employeeForm.get('departmentId'); }
+  get positionId() { return this.employeeForm.get('positionId'); }
 
   // Password validation helpers
   hasMinLength(): boolean {
