@@ -68,6 +68,13 @@ export class SidebarComponent implements OnChanges {
       icon: 'bi bi-calendar2-week',
       allowedRoles: ['Admin', 'HR'],
     },
+      {
+          label: 'Leave Types',           
+        route: '/Leavetyps',
+        icon: 'bi bi-list-check',
+        allowedRoles: ['Admin', 'HR'],
+
+      },
     {
       label: 'Requests',
       route: '/requests',

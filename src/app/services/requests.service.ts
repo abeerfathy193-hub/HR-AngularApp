@@ -13,13 +13,60 @@ export class RequestsService {
 
   constructor(private http: HttpClient) {}
 
-  //All Requests by an employee
+  //All Requests
   GetRequestsByEmployeeID(id: number) {
     return this.http.get<{
       errorMessage: string | null;
       haveError: boolean;
       result: RequestTableItem[];
     }>(`${this.Url}/${id}/requests`);
+  }
+
+  GetRequestsForApproval(id: number) {
+    return this.http.get<{
+      errorMessage: string | null;
+      haveError: boolean;
+      result: RequestTableItem[];
+    }>(`${this.Url}/${id}/dashboard`);
+  }
+
+  updateRequestStatus(type: string, dto: any) {
+    debugger;
+    let url = '';
+    switch (type) {
+      case 'Leave':
+        url = `${this.baseLeaveUrl}/${dto.id}`;
+        break;
+      case 'Resignation':
+        url = `${this.baseResignationUrl}/${dto.id}`;
+        break;
+      case 'HR Letter':
+        url = `${this.baseHRLetterUrl}/${dto.id}`;
+        break;
+    }
+    return this.http.put(url, dto);
+  }
+
+  cancelRequest(id: number, type: string, updatedBy: number) {
+    let url = '';
+    switch (type) {
+      case 'Leave':
+        url = `${this.baseLeaveUrl}/${id}`;
+        break;
+      case 'Resignation':
+        url = `${this.baseResignationUrl}/${id}`;
+        break;
+      case 'HR Letter':
+        url = `${this.baseHRLetterUrl}/${id}`;
+        break;
+    }
+
+    const body = {
+      Id: id,
+      NewStatus: 3, // Cancelled
+      UpdatedByUserId: updatedBy,
+    };
+    return this.http.put(url, body);
   }
 
   // Leave Requests

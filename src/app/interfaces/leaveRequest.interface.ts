@@ -3,7 +3,8 @@ export interface LeaveRequest {
   requestedById: number;
   startDate: string;
   numberOfDays: number;
-  leaveType: number;
+  typeId: number;
+  type: string;
   status: string;
   reason: string;
   attachment: string | null;

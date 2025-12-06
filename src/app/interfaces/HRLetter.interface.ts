@@ -6,6 +6,8 @@ export interface HRLetter {
   attachment: string | null;
   status: string;
   createdOn: string;
-  firstApproveId: number;
-  secondApproveId: number | null;
+  createdBy: string;
+  updatedOn: string;
+  firstApproveId: string;
+  secondApproveId: string | null;
 }

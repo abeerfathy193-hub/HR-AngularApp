@@ -34,18 +34,16 @@
                         @if(r.status == "Pending")
                         {
                         <a class="request-action-btn edit" [routerLink]="['/requests/view', r.id, r.type]">View</a>
-                        <a class="request-action-btn cancel" routerLink="/requests/resignations">Cancel</a>
+                        <a class="request-action-btn cancel" (click)="cancelRequest(r.id, r.type)">Cancel</a>
                         }
-                        @else {
+                        @else if(r.status == "Cancelled")
+                        {
                         No Action
                         }
+                        @else {
+                        <a class="request-action-btn edit" [routerLink]="['/requests/view', r.id, r.type]">View</a>
+                        }
                     </td>
-                    <!-- <td>
-                        <button *ngIf="role==='employee' && r.status==='Pending'">Edit</button>
-                        <button *ngIf="role!=='employee' && r.status==='Pending'">Approve</button>
-                        <button *ngIf="role!=='employee' && r.status==='Pending'">Reject</button>
-                    </td> -->
-
                 </tr>
                 }
                 } @else {

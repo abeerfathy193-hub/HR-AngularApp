@@ -1,36 +1,40 @@
-    // src/app/services/leave-type.service.ts
+// src/app/services/leave-type.service.ts
 
-    import { Injectable } from '@angular/core';
-    import { HttpClient } from '@angular/common/http';
-    import { Observable } from 'rxjs';
-    import { LeaveType, LeaveTypeCreateDto, LeaveTypeUpdateDto } from '../interfaces/leavetypes.interface';
-    import { environment } from '../../environments/environment';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import {
+  LeaveType,
+  LeaveTypeCreateDto,
+  LeaveTypeUpdateDto,
+} from '../interfaces/leavetypes.interface';
+import { environment } from '../../environments/environment';
 
-    @Injectable({
-    providedIn: 'root'
-    })
-    export class LeaveTypeService {
-    private apiUrl = 'https://localhost:44317/api/LeaveType';
+@Injectable({
+  providedIn: 'root',
+})
+export class LeaveTypeService {
+  private apiUrl = 'http://localhost:5220/api/LeaveType';
 
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-    getAll(): Observable<LeaveType[]> {
-        return this.http.get<LeaveType[]>(`${this.apiUrl}/LeaveTypes`);
-    }
+  getAll(): Observable<LeaveType[]> {
+    return this.http.get<LeaveType[]>(`${this.apiUrl}/LeaveTypes`);
+  }
 
-    getById(id: number): Observable<LeaveType> {
-        return this.http.get<LeaveType>(`${this.apiUrl}/LeaveTypeWithId/${id}`);
-    }
+  getById(id: number): Observable<LeaveType> {
+    return this.http.get<LeaveType>(`${this.apiUrl}/LeaveTypes/${id}`);
+  }
 
-    create(leaveType: LeaveTypeCreateDto): Observable<LeaveType> {
-        return this.http.post<LeaveType>(`${this.apiUrl}/CreateLeaveType`, leaveType);
-    }
+  create(leaveType: LeaveTypeCreateDto): Observable<LeaveType> {
+    return this.http.post<LeaveType>(`${this.apiUrl}/CreateLeaveType`, leaveType);
+  }
 
-    update(leaveType: LeaveTypeUpdateDto): Observable<LeaveType> {
-        return this.http.put<LeaveType>(`${this.apiUrl}/UpdateLeaveType`, leaveType);
-    }
+  update(leaveType: LeaveTypeUpdateDto): Observable<LeaveType> {
+    return this.http.put<LeaveType>(`${this.apiUrl}/UpdateLeaveType`, leaveType);
+  }
 
-    delete(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/DeleteLeaveTypeWithId/${id}`);
-    }
-    }
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/DeleteLeaveTypeWithId/${id}`);
+  }
+}

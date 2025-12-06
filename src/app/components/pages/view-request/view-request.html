@@ -1,0 +1,269 @@
+@if( requestType == "Leave"){
+<div>
+    <div class="card shadow p-4 border-0 rounded-4 text" style="max-width: 750px; margin:auto;">
+        <h3 class="mb-3 fw-bold text-center" style="color: var(--primary-color)">
+            Leave Request Details
+        </h3>
+
+        <hr>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>ID:</strong></div>
+            <div class="col-6">{{ requestData.id }}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>Start Date:</strong></div>
+            <div class="col-6">{{ requestData.startDate | date:'MMM d, yyyy' }}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>Number of Days:</strong></div>
+            <div class="col-6">{{ requestData.numberOfDays }}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>Leave Type:</strong></div>
+            <div class="col-6">{{ leaveTypeName }}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>Reason:</strong></div>
+            <div class="col-6">{{ requestData.reason }}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>Type:</strong></div>
+            <div class="col-6">{{ requestData.isPaid ? 'Paid' : 'Unpaid' }}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>Attachment:</strong></div>
+            <div class="col-6">
+                <a *ngIf="requestData.attachment" [href]="requestData.attachment" target="_blank"
+                    class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                    View
+                </a>
+                <span *ngIf="!requestData.attachment" class="text-muted">No attachment</span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>Status:</strong></div>
+            <div class="col-6">
+                <span class="badge px-3 py-2 rounded-pill fs-6" [ngClass]="{
+        'bg-warning text-dark': requestData.status == 0,
+        'bg-success': requestData.status == 1,
+        'bg-danger': requestData.status == 2,
+        'bg-secondary': requestData.status == 3
+      }">
+                    {{ statusMap[requestData.status] }}
+                </span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>Requested By:</strong></div>
+            <div class="col-6">{{ requestData.requestedById }}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>First Approver:</strong></div>
+            <div class="col-6">{{ requestData.firstApproveId }}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>Second Approver:</strong></div>
+            <div class="col-6">{{ requestData.secondApproveId || 'N/A' }}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6"><strong>Created On:</strong></div>
+            <div class="col-6">{{ requestData.createdOn | date:'MMM d, y - HH:mm' }}</div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-6"><strong>Last Updated:</strong></div>
+            <div class="col-6">{{ requestData.updatedOn ? (requestData.updatedOn | date:'MMM d, y - HH:mm') : 'Not
+                updated' }}</div>
+        </div>
+
+        <hr>
+
+        <div class="d-flex justify-content-end gap-2">
+            <button (click)="goBack()" class="btn px-4 rounded-pill"
+                style="background-color: var(--primary-color); color: white;">Back</button>
+        </div>
+    </div>
+</div>
+}
+@else if (requestType == "Resignation") {
+<div class="card shadow p-4 border-0 rounded-4 text" style="max-width: 750px; margin:auto;">
+    <h3 class="mb-3 fw-bold text-center" style="color: var(--primary-color)">
+        Resignation Request Details
+    </h3>
+
+    <hr>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>ID:</strong></div>
+        <div class="col-6">{{ requestData.id }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Proposed Last Working Day:</strong></div>
+        <div class="col-6">{{ requestData.proposedLastWorkingDay | date:'MMM d, yyyy' }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Reason:</strong></div>
+        <div class="col-6">{{ requestData.reason }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Attachment:</strong></div>
+        <div class="col-6">
+            <a *ngIf="requestData.attachment" [href]="requestData.attachment" target="_blank"
+                class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                View
+            </a>
+            <span *ngIf="!requestData.attachment" class="text-muted">No attachment</span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Status:</strong></div>
+        <div class="col-6">
+            <span class="badge px-3 py-2 rounded-pill fs-6" [ngClass]="{
+                    'bg-warning text-dark': requestData.status == 0,
+                    'bg-success': requestData.status == 1,
+                    'bg-danger': requestData.status == 2,
+                    'bg-secondary': requestData.status == 3
+                  }">
+                {{ statusMap[requestData.status] }}
+            </span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Requested By:</strong></div>
+        <div class="col-6">{{ requestData.createdBy || requestData.requestedById }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>First Approver:</strong></div>
+        <div class="col-6">{{ requestData.firstApproveId || 'N/A' }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Second Approver:</strong></div>
+        <div class="col-6">{{ requestData.secondApproveId || 'N/A' }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Created On:</strong></div>
+        <div class="col-6">{{ requestData.createdOn | date:'MMM d, y - HH:mm' }}</div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-6"><strong>Last Updated:</strong></div>
+        <div class="col-6">{{ requestData.updatedOn ? (requestData.updatedOn | date:'MMM d, y - HH:mm') : 'Not updated'
+            }}</div>
+    </div>
+
+    <hr>
+
+    <div class="d-flex justify-content-end gap-2">
+        <button (click)="goBack()" class="btn px-4 rounded-pill"
+            style="background-color: var(--primary-color); color: white;">Back</button>
+    </div>
+</div>
+}
+@else if(requestType == "HR Letter")
+{
+<div class="card shadow p-4 border-0 rounded-4 text" style="max-width: 750px; margin:auto;">
+    <h3 class="mb-3 fw-bold text-center" style="color: var(--primary-color)">
+        HR Letter Request Details
+    </h3>
+
+    <hr>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>ID:</strong></div>
+        <div class="col-6">{{ requestData.id }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Sent To:</strong></div>
+        <div class="col-6">{{ requestData.sentTo }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Reason:</strong></div>
+        <div class="col-6">{{ requestData.reason }}</div>
+    </div>
+
+    <div class="row mb-3" *ngIf="requestData.extraDetails">
+        <div class="col-6"><strong>Extra Details:</strong></div>
+        <div class="col-6">{{ requestData.extraDetails }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Attachment:</strong></div>
+        <div class="col-6">
+            <a *ngIf="requestData.attachment" [href]="requestData.attachment" target="_blank"
+                class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                View
+            </a>
+            <span *ngIf="!requestData.attachment" class="text-muted">No attachment</span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Status:</strong></div>
+        <div class="col-6">
+            <span class="badge px-3 py-2 rounded-pill fs-6" [ngClass]="{
+                    'bg-warning text-dark': requestData.status == 0,
+                    'bg-success': requestData.status == 1,
+                    'bg-danger': requestData.status == 2,
+                    'bg-secondary': requestData.status == 3
+                  }">
+                {{ statusMap[requestData.status] }}
+            </span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Requested By:</strong></div>
+        <div class="col-6">{{ requestData.createdBy}}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>First Approver:</strong></div>
+        <div class="col-6">{{ requestData.firstApproveId || 'N/A' }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Second Approver:</strong></div>
+        <div class="col-6">{{ requestData.secondApproveId || 'N/A' }}</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6"><strong>Created On:</strong></div>
+        <div class="col-6">{{ requestData.createdOn | date:'MMM d, y - HH:mm' }}</div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-6"><strong>Last Updated:</strong></div>
+        <div class="col-6">{{ requestData.updatedOn ? (requestData.updatedOn | date:'MMM d, y - HH:mm') : 'Not updated'
+            }}</div>
+    </div>
+
+    <hr>
+
+    <div class="d-flex justify-content-end gap-2">
+        <button (click)="goBack()" class="btn px-4 rounded-pill"
+            style="background-color: var(--primary-color); color: white;">Back</button>
+    </div>
+</div>
+}

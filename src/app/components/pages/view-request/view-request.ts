@@ -1,20 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RequestsService } from '../services/requests.service';
+import { RequestsService } from '../../../services/requests.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { LeaveTypeService } from '../../../services/leavetype.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-view-request',
-  imports: [DatePipe],
+  imports: [DatePipe, CommonModule],
   templateUrl: './view-request.html',
   styleUrl: './view-request.css',
 })
 export class ViewRequest implements OnInit {
   requestData: any;
+  leaveTypeName: any;
   requestType!: string;
 
-  constructor(private route: ActivatedRoute, private requestsService: RequestsService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location,
+    private requestsService: RequestsService,
+    private leaveTypesService: LeaveTypeService
+  ) {}
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -23,9 +31,12 @@ export class ViewRequest implements OnInit {
     this.requestType = type!;
     switch (type) {
       case 'Leave':
-        this.requestsService
-          .getLeaveRequestById(id)
-          .subscribe((r) => (this.requestData = r.result));
+        this.requestsService.getLeaveRequestById(id).subscribe((r) => {
+          this.requestData = r.result;
+          this.leaveTypesService
+            .getById(this.requestData.typeId)
+            .subscribe((r) => (this.leaveTypeName = r.name));
+        });
         break;
       case 'Resignation':
         this.requestsService
@@ -38,5 +49,16 @@ export class ViewRequest implements OnInit {
           .subscribe((r) => (this.requestData = r.result));
         break;
     }
+  }
+
+  statusMap: any = {
+    0: 'Pending',
+    1: 'Approved',
+    2: 'Rejected',
+    3: 'Cancelled',
+  };
+
+  goBack() {
+    this.location.back();
   }
 }

@@ -19,18 +19,18 @@ export class Requests implements OnInit {
   constructor(private requestsService: RequestsService, private userService: UserTemp) {}
 
   ngOnInit(): void {
-    const StatusMap: { [key: string]: string } = {
-      '0': 'Pending',
-      '1': 'Approved',
-      '2': 'Rejected',
-      '3': 'In Progress',
-    };
     this.userService.getUserData().subscribe((data) => {
       this.employee = data.employee;
       this.person = data.person;
-      this.loadRequests(StatusMap);
+      this.loadRequests(this.StatusMap);
     });
   }
+  StatusMap: { [key: string]: string } = {
+    '0': 'Pending',
+    '1': 'Approved',
+    '2': 'Rejected',
+    '3': 'Cancelled',
+  };
 
   addDays(dateStr: string, days: number): string {
     const date = new Date(dateStr);
@@ -39,7 +39,7 @@ export class Requests implements OnInit {
   }
 
   loadRequests(StatusMap: any) {
-    this.requestsService.GetRequestsByEmployeeID(6).subscribe({
+    this.requestsService.GetRequestsByEmployeeID(1).subscribe({
       next: (req) => {
         this.allRequests = req.result.map((r) => ({
           id: r.id,
@@ -51,5 +51,18 @@ export class Requests implements OnInit {
       },
       error: (err) => console.error('Leave request error', err),
     });
+  }
+
+  cancelRequest(requestId: number, requestType: string) {
+    const confirmed = confirm('Are you sure you want to cancel this request?');
+    if (confirmed) {
+      this.requestsService.cancelRequest(requestId, requestType, 1).subscribe({
+        next: () => {
+          alert('Request canceled successfully!');
+          this.loadRequests(this.StatusMap); // reload the list
+        },
+        error: (err) => console.error(err),
+      });
+    }
   }
 }

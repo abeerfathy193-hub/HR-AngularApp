@@ -1,0 +1,93 @@
+/* Card styling */
+.card-request {
+  max-width: 750px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: none;
+  background: #fff7f0; /* light orange background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card header */
+.card-request h3 {
+  color: #ff6600; /* primary orange */
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* Row styling */
+.card-request .row {
+  margin-bottom: 0.8rem;
+}
+
+/* Labels */
+.card-request .col-6:first-child {
+  font-weight: 600;
+  color: #ff6600;
+}
+
+/* Badge status styling */
+.badge-status {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-pending {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-approved {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-rejected {
+  background-color: #dc3545;
+  color: white;
+}
+
+.badge-cancelled {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Buttons */
+.card-request .btn-back {
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.card-request .btn-back:hover {
+  background-color: #e65c00;
+  color: white;
+  text-decoration: none;
+}
+
+/* Attachment button */
+.card-request .btn-attachment {
+  background-color: transparent;
+  border: 1px solid #ff6600;
+  color: #ff6600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 2rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.card-request .btn-attachment:hover {
+  background-color: #ff6600;
+  color: white;
+}

@@ -1,0 +1,87 @@
+<!-- open-vacancies.html -->
+<div class="vacancies-page">
+  <!-- Filter Section -->
+  <div class="filter-section" [formGroup]="filterForm">
+    <div class="filter-header">
+      <h3>Filter Vacancies</h3>
+    </div>
+    
+    <div class="filter-row">
+      <!-- Employment Type Filter -->
+      <div class="filter-group">
+        <label>Employment Type</label>
+        <select formControlName="employmentType" class="filter-select">
+          <option value="all">All Types</option>
+          <option *ngFor="let type of employmentTypes" [value]="type.id">
+            {{ type.name }}
+          </option>
+        </select>
+      </div>
+      
+      <!-- Search Filter -->
+      <div class="filter-group">
+        <label>Search</label>
+        <input 
+          type="text" 
+          formControlName="search" 
+          class="filter-select" 
+          placeholder="Search vacancies..."
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading vacancies...</p>
+  </div>
+
+  <!-- No Results -->
+  <div *ngIf="!isLoading && filteredVacancies.length === 0" class="no-results">
+    <h4>No vacancies found</h4>
+    <p *ngIf="hasActiveFilters()">
+      <button (click)="clearFilters()" class="clear-btn">Clear filters</button>
+    </p>
+  </div>
+
+  <!-- Vacancies List -->
+  <div *ngIf="!isLoading && filteredVacancies.length > 0" class="vacancies-container">
+    <h3 class="results-title">Available Positions ({{filteredVacancies.length}})</h3>
+
+    <div class="vacancies-list">
+      <div class="vacancy-card" *ngFor="let vacancy of filteredVacancies">
+        <!-- تم نقل الـ badges هنا قبل العنوان -->
+        <div class="vacancy-badges-left">
+          <span class="badge badge-type">{{ vacancy.employmentType }}</span>
+          <span class="badge badge-status" [ngClass]="getStatusClass(vacancy.status)">
+            {{ vacancy.status }}
+          </span>
+          <span *ngIf="vacancy.isRemote" class="badge badge-remote">Remote</span>
+        </div>
+        
+        <div class="card-header">
+          <h3 class="vacancy-title">{{ vacancy.title }}</h3>
+        </div>
+        
+        <p class="vacancy-description">{{ getShortDescription(vacancy.description) }}</p>
+        
+        <div class="vacancy-details">
+          <p><strong>Department:</strong> {{ vacancy.departmentName || 'Not specified' }}</p>
+          <p><strong>Location:</strong> {{ vacancy.location || 'Not specified' }}</p>
+          <p><strong>Salary:</strong> {{ getVacancySalaryRange(vacancy) }}</p>
+          <p><strong>Openings:</strong> {{ vacancy.numberOfOpenings }}</p>
+          <p *ngIf="getDaysRemaining(vacancy) !== null">
+            <strong>Closes in:</strong> {{ getDaysRemaining(vacancy) }} days
+          </p>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn-apply" (click)="applyForVacancy(vacancy)">
+            Apply Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -13,11 +13,18 @@ import { VacanciesComponent } from './components/pages/vacancies/vacancies.compo
 import { LoginComponent } from './components/pages/login/login.component';
 import { RegisterComponent } from './components/pages/register/register.component';
 import { authGuard } from './guards/auth.guard';
+<<<<<<< HEAD
+import { OpenVacancies } from './components/pages/open-vacancies/open-vacancies';
+import { ApplyForm } from './components/pages/apply-form/apply-form';
+import { MyApplications } from './components/pages/my-applications/my-applications';
+import { ApplicationDetails } from './components/pages/application-details/application-details';
+import { Interview } from './components/pages/interview/interview';
+=======
 import { Leaves } from './components/pages/leaves/leaves';
 import { Requests } from './components/pages/requests/requests';
 import { Resignations } from './components/pages/resignations/resignations';
 import { Hrletters } from './components/pages/hrletters/hrletters';
-import { ViewRequest } from './view-request/view-request';
+import { ViewRequest } from './components/pages/view-request/view-request';
 import { CreateContractComponent } from './components/pages/contracts/create.contract/create-contract';
 import { ViewContractComponent } from './components/pages/contracts/contract.view/contract.view';
 import { EditContractComponent } from './components/pages/contracts/contract.edit/contract.edit';
@@ -25,6 +32,7 @@ import { EmployeeComponent } from './components/pages/employee-component/employe
 import { AddEmployeeComponent } from './components/pages/employee-component/add-employee/add-employee.component';
 import { LeaveTypeComponent } from './components/pages/leavetypscomponant/leavetypscomponant';
 import { CompanyInfoComponent } from './components/pages/company-info/company-info.component';
+>>>>>>> upstream/main
 
 export const routes: Routes = [
   {
@@ -35,6 +43,11 @@ export const routes: Routes = [
     path: 'register',
     component: RegisterComponent,
   },
+  { path: 'openvacancies', component: OpenVacancies },
+  { path: 'apply/:id', component: ApplyForm },
+  { path: 'my-applications', component: MyApplications },
+
+
   {
     path: '',
     component: LayoutComponent,
@@ -67,12 +80,24 @@ export const routes: Routes = [
       { path: 'payroll', component: PayrollComponent },
       { path: 'attendance', component: AttendanceComponent },
       { path: 'vacancies', component: VacanciesComponent },
-       { path: 'Leavetyps', component: LeaveTypeComponent }
+<<<<<<< HEAD
+      { path: 'application-details/:id', component: ApplicationDetails },
+      { path: 'schedule-interview/:applicationId', component: Interview }
+
+
+
     ]
+    
+  }
+  
+=======
+      { path: 'Leavetyps', component: LeaveTypeComponent },
+    ],
   },
-      { path: 'requests', component: Requests },
-      { path: 'requests/leaves', component: Leaves },
-      { path: 'requests/resignations', component: Resignations },
-      { path: 'requests/hrletters', component: Hrletters },
-      { path: 'requests/view/:id/:type', component: ViewRequest },
+  { path: 'requests', component: Requests },
+  { path: 'requests/leaves', component: Leaves },
+  { path: 'requests/resignations', component: Resignations },
+  { path: 'requests/hrletters', component: Hrletters },
+  { path: 'requests/view/:id/:type', component: ViewRequest },
+>>>>>>> upstream/main
 ];

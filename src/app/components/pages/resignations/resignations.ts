@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RequestsService } from '../../../services/requests.service';
 import { CommonModule } from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-resignations',
@@ -14,7 +15,11 @@ export class Resignations {
   attachmentBase64: string | null = null;
   name: string = 'Ahmed';
 
-  constructor(private fb: FormBuilder, private resignationService: RequestsService) {
+  constructor(
+    private fb: FormBuilder,
+    private resignationService: RequestsService,
+    private location: Location
+  ) {
     this.resignationForm = this.fb.group({
       requestedById: [6],
       reason: ['', Validators.required],
@@ -40,6 +45,7 @@ export class Resignations {
     };
 
     this.resignationService.createResignationRequest({ ...payload }).subscribe(() => {});
+    this.goBack();
   }
 
   onFileChange(event: any) {
@@ -51,5 +57,9 @@ export class Resignations {
       this.attachmentBase64 = reader.result as string;
     };
     reader.readAsDataURL(file);
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

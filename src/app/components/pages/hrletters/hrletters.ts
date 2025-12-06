@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RequestsService } from '../../../services/requests.service';
 import { CommonModule } from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-hrletters',
@@ -14,10 +15,14 @@ export class Hrletters {
   attachmentBase64: string | null = null;
   name: string = 'Ahmed';
 
-  constructor(private fb: FormBuilder, private hrService: RequestsService) {
+  constructor(
+    private fb: FormBuilder,
+    private hrService: RequestsService,
+    private location: Location
+  ) {
     this.hrLetterForm = this.fb.group({
       requestedById: [6],
-      letterType: ['', Validators.required],
+      sentTo: ['', Validators.required],
       reason: ['', Validators.required],
       extraDetails: [''],
       attachment: [''],
@@ -28,19 +33,28 @@ export class Hrletters {
 
   submitForm() {
     const f = this.hrLetterForm.value;
-    const payload = {
-      requestedById: Number(f.requestedById),
-      letterType: f.letterType,
-      reason: f.reason,
-      extraDetails: f.extraDetails?.trim() === '' ? null : f.extraDetails,
-      attachment: f.attachment?.trim() === '' ? null : f.attachment,
-      firstApproveId: Number(f.firstApproveId),
-      secondApproveId:
-        f.secondApproveId?.toString().trim() === '' ? null : Number(f.secondApproveId),
-      createdBy: this.name,
-    };
 
-    this.hrService.createHRLetterRequest({ ...payload }).subscribe({});
+    const formData = new FormData();
+
+    formData.append('requestedById', String(f.requestedById));
+    formData.append('sentTo', f.letterType);
+    formData.append('reason', f.reason);
+
+    formData.append('extraDetails', f.extraDetails?.trim() === '' ? '' : f.extraDetails);
+    formData.append('attachment', f.attachment?.trim() === '' ? '' : f.attachment);
+
+    formData.append('firstApproveId', String(f.firstApproveId));
+
+    if (f.secondApproveId?.toString().trim() !== '') {
+      formData.append('secondApproveId', String(f.secondApproveId));
+    } else {
+      formData.append('secondApproveId', '');
+    }
+
+    formData.append('createdBy', this.name);
+    this.hrService.createHRLetterRequest(formData).subscribe(() => {
+      this.goBack();
+    });
   }
 
   onFileChange(event: any) {
@@ -52,5 +66,9 @@ export class Hrletters {
       this.attachmentBase64 = reader.result as string;
     };
     reader.readAsDataURL(file);
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

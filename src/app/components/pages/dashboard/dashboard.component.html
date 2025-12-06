@@ -1,13 +1,13 @@
 <div class="dashboard-container">
   <div class="stats-grid">
     @for (stat of stats; track stat.label) {
-      <div class="stat-card">
-        <div class="stat-icon">{{ stat.icon }}</div>
-        <div class="stat-content">
-          <h3 class="stat-value">{{ stat.value }}</h3>
-          <p class="stat-label">{{ stat.label }}</p>
-        </div>
+    <div class="stat-card">
+      <div class="stat-icon">{{ stat.icon }}</div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ stat.value }}</h3>
+        <p class="stat-label">{{ stat.label }}</p>
       </div>
+    </div>
     }
   </div>
 
@@ -21,6 +21,62 @@
       </div>
     </div>
   </div>
+
+  <div class="content-section mt-4">
+    <div class="card">
+      <div class="card-header">
+        <h5>Pending Requests</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped table-hover text-center">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Employee</th>
+              <th>Type</th>
+              <th>Submitted On</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (pendingRequests.length > 0) {
+            @for (r of pendingRequests; track r.id) {
+            <tr>
+              <td>{{ r.id }}</td>
+              <td>{{r.name}}</td>
+              <td>{{r.type}}</td>
+              <td>{{ r.date | date:"medium"}}</td>
+              <td>
+                <span [ngClass]="{
+                        'badge-pending': r.status === 'Pending',
+                        'badge-approved': r.status === 'Approved',
+                        'badge-rejected': r.status === 'Rejected'
+                        }">{{ r.status }}
+                </span>
+              </td>
+              <td>
+                @if(r.status == "Pending")
+                {
+                <button class="btn btn-success btn-sm me-2" (click)="handleRequest(r,'approve')">Approve</button>
+                <button class="btn btn-danger btn-sm" (click)="handleRequest(r, 'reject')">Reject</button>
+                <button class="request-action-btn edit" [routerLink]="['/requests/view', r.id, r.type]">View</button>
+                }
+                @else {
+                No Action
+                }
+              </td>
+            </tr>
+            }
+            } @else {
+            <tr>
+              <td colspan="7">No Data</td>
+            </tr>
+            }
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
-
-
