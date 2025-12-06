@@ -1,56 +1,168 @@
 <div class="leave-form-wrapper">
-
-    <h2>Create Leave Request</h2>
+    <div class="form-header">
+        <h2>Create Leave Request</h2>
+        <p class="form-subtitle">Fill in the details below to submit your leave request</p>
+    </div>
 
     <form [formGroup]="form" (ngSubmit)="submit()" class="leave-form">
 
+        <!-- Start Date -->
         <div class="form-row">
-            <label>Start Date</label>
-            <input type="date" formControlName="startDate" />
+            <label for="startDate">Start Date <span class="required">*</span></label>
+            <input id="startDate" type="date" formControlName="startDate" class="form-control"
+                [class.is-invalid]="form.get('startDate')?.touched && form.get('startDate')?.invalid" />
+            <span class="error-text" *ngIf="form.get('startDate')?.touched && form.get('startDate')?.invalid">
+                Start date is required
+            </span>
         </div>
 
+        <!-- Number of Days -->
         <div class="form-row">
-            <label>Number of Days</label>
-            <input type="number" formControlName="numberOfDays" />
+            <label for="numberOfDays">Number of Days <span class="required">*</span></label>
+            <input id="numberOfDays" type="number" formControlName="numberOfDays" class="form-control" min="1"
+                [class.is-invalid]="form.get('numberOfDays')?.touched && form.get('numberOfDays')?.invalid" />
+            <span class="error-text" *ngIf="form.get('numberOfDays')?.touched && form.get('numberOfDays')?.invalid">
+                Number of days is required (minimum 1)
+            </span>
         </div>
 
+        <!-- Leave Type -->
         <div class="form-row">
-            <label>Leave Type</label>
-            <select formControlName="leaveType">
+            <label for="leaveType">Leave Type <span class="required">*</span></label>
+            <select id="leaveType" formControlName="leaveType" class="form-control"
+                [class.is-invalid]="form.get('leaveType')?.touched && form.get('leaveType')?.invalid">
+                <option value="" disabled>-- Select Leave Type --</option>
                 <option *ngFor="let t of leaveTypes" [value]="t.id">
                     {{ t.name }}
                 </option>
             </select>
+            <span class="error-text" *ngIf="form.get('leaveType')?.touched && form.get('leaveType')?.invalid">
+                Please select a leave type
+            </span>
+
+            <!-- Leave Type Info Box -->
+            <div class="leave-type-info" *ngIf="selectedLeaveType">
+                <div class="info-item">
+                    <span class="label">Paid Leave:</span>
+                    <span class="badge" [class.badge-success]="selectedLeaveType?.isPaid"
+                        [class.badge-secondary]="!selectedLeaveType?.isPaid">
+                        {{ selectedLeaveType?.isPaid ? 'Yes' : 'No' }}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Requires Approval:</span>
+                    <span class="badge" [class.badge-warning]="selectedLeaveType?.requiresApproval"
+                        [class.badge-success]="!selectedLeaveType?.requiresApproval">
+                        {{ selectedLeaveType?.requiresApproval ? 'Yes' : 'No' }}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Attachment Required:</span>
+                    <span class="badge" [class.badge-danger]="selectedLeaveType?.requiresAttachment"
+                        [class.badge-success]="!selectedLeaveType?.requiresAttachment">
+                        {{ selectedLeaveType?.requiresAttachment ? 'Yes' : 'No' }}
+                    </span>
+                </div>
+            </div>
         </div>
 
+        <!-- Reason -->
         <div class="form-row">
-            <label>Reason</label>
-            <textarea formControlName="reason" rows="4"></textarea>
+            <label for="reason">Reason <span class="required">*</span></label>
+            <textarea id="reason" formControlName="reason" rows="4" class="form-control"
+                placeholder="Please provide a reason for your leave request"
+                [class.is-invalid]="form.get('reason')?.touched && form.get('reason')?.invalid"></textarea>
+            <span class="error-text" *ngIf="form.get('reason')?.touched && form.get('reason')?.invalid">
+                Reason is required
+            </span>
         </div>
 
+        <!-- Attachment -->
         <div class="form-row">
-            <label>Attachment (Optional)</label>
-            <input type="file" (change)="onFileChange($event)" />
+            <label for="attachment">
+                Attachment
+                <span class="required" *ngIf="showAttachmentRequired()">*</span>
+                <span class="optional" *ngIf="!showAttachmentRequired()">(Optional)</span>
+            </label>
+            <div class="file-input-wrapper">
+                <input #fileInput id="attachment" type="file" (change)="onFileChange($event)"
+                    [required]="showAttachmentRequired()" class="file-input"
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx" />
+                <div class="file-input-label" (click)="fileInput.click()">
+                    <span class="file-icon">📎</span>
+                    <div class="file-text">
+                        <span *ngIf="!attachmentBase64" class="file-placeholder">
+                            <strong>Choose file</strong> or drag and drop
+                        </span>
+                        <span *ngIf="attachmentBase64" class="file-selected">
+                            ✓ File selected
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- Is Paid -->
         <div class="form-row checkbox-row">
-            <label>Is Paid</label>
-            <input type="checkbox" formControlName="isPaid" />
+            <div class="checkbox-wrapper">
+                <input id="isPaid" type="checkbox" formControlName="isPaid"
+                    [disabled]="selectedLeaveType?.isPaid || false" class="checkbox-input" />
+                <label for="isPaid" class="checkbox-label">
+                    Is Paid Leave
+                </label>
+            </div>
+            <span class="info-badge" *ngIf="selectedLeaveType?.isPaid">
+                ℹ️ This leave type is always paid
+            </span>
         </div>
 
-        <div class="form-row">
-            <label>First Approver ID</label>
-            <input type="number" formControlName="firstApproveId" />
+        <!-- Approvers Section -->
+        <div class="approvers-section">
+            <h3>Approval Chain</h3>
+
+            <!-- First Approver -->
+            <div class="form-row">
+                <label for="firstApproveId">
+                    First Approver ID <span class="required">*</span>
+                    <span class="info-text">(Always required)</span>
+                </label>
+                <input id="firstApproveId" type="number" formControlName="firstApproveId" class="form-control"
+                    [class.is-invalid]="form.get('firstApproveId')?.touched && form.get('firstApproveId')?.invalid" />
+                <span class="error-text"
+                    *ngIf="form.get('firstApproveId')?.touched && form.get('firstApproveId')?.invalid">
+                    First approver ID is required
+                </span>
+            </div>
+
+            <!-- Second Approver (Conditional) -->
+            <div class="form-row" *ngIf="showSecondApprover()">
+                <label for="secondApproveId">
+                    Second Approver ID <span class="required">*</span>
+                    <span class="info-text">(Required for this leave type)</span>
+                </label>
+                <input id="secondApproveId" type="number" formControlName="secondApproveId" class="form-control"
+                    [class.is-invalid]="form.get('secondApproveId')?.touched && form.get('secondApproveId')?.invalid" />
+                <span class="error-text"
+                    *ngIf="form.get('secondApproveId')?.touched && form.get('secondApproveId')?.invalid">
+                    Second approver ID is required for this leave type
+                </span>
+            </div>
+
+            <div class="approver-info" *ngIf="!showSecondApprover() && selectedLeaveType">
+                <span class="info-badge-success">✓ Only one approval needed</span>
+            </div>
         </div>
 
-        <div class="form-row">
-            <label>Second Approver ID (Optional)</label>
-            <input type="number" formControlName="secondApproveId" />
+        <!-- Submit Button -->
+        <div class="form-actions">
+            <button class="submit-btn" type="submit" [disabled]="form.invalid">
+                <span>Submit Request</span>
+                <span class="btn-icon">→</span>
+            </button>
+            <button class="cancel-btn" type="button" (click)="goBack()">
+                Cancel
+            </button>
         </div>
-
-        <button class="submit-btn" type="submit" [disabled]="form.invalid">
-            Submit Request
-        </button>
 
     </form>
 </div>
